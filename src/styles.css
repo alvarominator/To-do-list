@@ -1,1 +1,59 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background-color: white; 
+  color: black;
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.sidebar {
+  width: 16rem;
+  background-color: #f3f4f6;
+  border-right: 1px solid #ccc;
+  padding: 1rem;
+  box-sizing: border-box;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.botont {
+  margin-left: 3px;
+  margin-bottom: 3px;
+  width: 215px;
+}
+
+.titu {
+  margin-left: 3px;
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  display: flex; 
+  overflow: hidden;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+.task-panel {
+  width: 16rem;
+  background-color: #f3f4f6;
+  border-left: 1px solid #ccc;
+  padding: 1rem;
+  box-sizing: border-box;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Scroll interno porsi*/
+  height: 100vh; 
+}

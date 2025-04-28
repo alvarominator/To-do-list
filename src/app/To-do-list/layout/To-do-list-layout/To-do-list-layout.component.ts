@@ -1,0 +1,12 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ToDoListMenuComponent } from "../../components/To-do-list-menu/To-do-list-menu.component";
+import { RouterOutlet } from '@angular/router';
+import { ToDoListEditComponent } from "../../components/To-do-list-edit/To-do-list-edit.component";
+
+@Component({
+  selector: 'to-do-list-layout',
+  imports: [ToDoListMenuComponent, RouterOutlet, ToDoListEditComponent],
+  templateUrl: './To-do-list-layout.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ToDoListLayoutComponent { }
