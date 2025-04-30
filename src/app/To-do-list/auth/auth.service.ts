@@ -14,21 +14,36 @@ export class AuthService {
   constructor(private router: Router) {}
 
   login(email: string, password: string): Observable<boolean> {
-    // Simulate login (replace with real HTTP call later)
-    if (email === 'admin@example.com' && password === '123456') {
+    const users = JSON.parse(localStorage.getItem('users') || '{}');
+    const user = users[email];
+  
+    const isValid = user && user.password === password;
+  
+    if (isValid) {
       localStorage.setItem(this.tokenKey, 'dummy-token');
       this.tokenSignal.set('dummy-token');
       return of(true).pipe(delay(300));
     }
+  
     return of(false).pipe(delay(300));
   }
-
+  
   register(email: string, password: string): Observable<boolean> {
-    // Simulate register (replace with HTTP later)
+    const users = JSON.parse(localStorage.getItem('users') || '{}');
+  
+    if (users[email]) {
+      return of(false).pipe(delay(300));
+    }
+  
+    users[email] = { email, password };
+    localStorage.setItem('users', JSON.stringify(users));
+  
     localStorage.setItem(this.tokenKey, 'dummy-token');
     this.tokenSignal.set('dummy-token');
+  
     return of(true).pipe(delay(300));
   }
+  
 
   logout() {
     localStorage.removeItem(this.tokenKey);
