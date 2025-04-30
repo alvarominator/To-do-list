@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './To-do-list/auth/auth.guard';
+import { AuthFormComponent } from './To-do-list/auth/auth-form/auth-form.component';
 import { ToDoListLayoutComponent } from './To-do-list/layout/To-do-list-layout/To-do-list-layout.component';
 import { NonStartedPageComponent } from './To-do-list/pages/non-started-page/non-started-page.component';
 import { InProgressPageComponent } from './To-do-list/pages/in-progress-page/in-progress-page.component';
@@ -8,8 +10,17 @@ import { FinishedPageComponent } from './To-do-list/pages/finished-page/finished
 
 export const routes: Routes = [
   {
+    path: 'login',
+    component: AuthFormComponent
+  },
+  {
+    path: 'register',
+    component: AuthFormComponent
+  },
+  {
     path: '',
     component: ToDoListLayoutComponent,
+    canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'non-started', pathMatch: 'full' },
       { path: 'non-started', component: NonStartedPageComponent },
@@ -24,3 +35,4 @@ export const routes: Routes = [
     redirectTo: ''
   }
 ];
+

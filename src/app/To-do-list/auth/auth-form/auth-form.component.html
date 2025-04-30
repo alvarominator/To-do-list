@@ -1,0 +1,38 @@
+<p-card [header]="isRegisterMode() ? 'Register' : 'Login'" class="w-full max-w-sm m-auto mt-8 shadow-3">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-fluid">
+  
+      <div class="field mb-3">
+        <label for="email">Email</label>
+        <input id="email" pInputText formControlName="email" type="email" />
+        <small *ngIf="form.controls.email.invalid && form.controls.email.touched" class="p-error">
+          Valid email is required
+        </small>
+      </div>
+  
+      <div class="field mb-3">
+        <label for="password">Password</label>
+        <input id="password" pPassword formControlName="password" toggleMask="true" feedback="false" />
+        <small *ngIf="form.controls.password.invalid && form.controls.password.touched" class="p-error">
+          Password is required
+        </small>
+      </div>
+  
+      <div *ngIf="isRegisterMode()" class="field mb-3">
+        <label for="confirmPassword">Confirm Password</label>
+        <input id="confirmPassword" pPassword formControlName="confirmPassword" toggleMask="true" feedback="false" />
+      </div>
+  
+      <button type="submit" pButton [label]="isRegisterMode() ? 'Register' : 'Login'" class="w-full"
+        [disabled]="form.invalid">
+      </button>
+  
+      <p-message *ngIf="authError" severity="error" [text]="isRegisterMode() ? 'Passwords must match or invalid data' : 'Invalid credentials'"></p-message>
+    </form>
+  
+    <div class="mt-3 text-center">
+      <a [routerLink]="isRegisterMode() ? '/login' : '/register'" class="text-blue-500 underline cursor-pointer">
+        {{ isRegisterMode() ? 'Already have an account? Log in here.' : 'Don’t have an account? Register here.' }}
+      </a>
+    </div>
+  </p-card>
+  
