@@ -1,15 +1,60 @@
 <div class="p-3">
-    <h3 class="titu">Tasks</h3>
-    <div class="flex flex-col gap-2">
-      <button pButton type="button" severity="secondary" label="Non started" icon="pi pi-clock" class="botont" > </button>
-      <br>
-      <button pButton type="button" severity="secondary" label="In progress" icon="pi pi-spinner" class="botont"  ></button>
-      <br>
-      <button pButton type="button" severity="secondary" label="Paused" icon="pi pi-pause" class="botont"  ></button>
-      <br>
-      <button pButton type="button" severity="secondary" label="Late" icon="pi pi-exclamation-triangle" class="botont"  ></button>
-      <br>
-      <button pButton type="button" severity="secondary" label="Finished" icon="pi pi-check-circle" class="botont"  ></button>
-    </div>
+  <h3 class="titu">Tasks</h3>
+  <div>
+    <button 
+      pButton 
+      type="button" 
+      severity="secondary" 
+      label="Non started" 
+      icon="pi pi-clock" 
+      class="botont"
+      [routerLink]="['/non-started']">
+    </button>
+    <br>
+
+    <button 
+      pButton 
+      type="button" 
+      severity="secondary" 
+      label="In progress" 
+      icon="pi pi-spinner" 
+      class="botont"
+      [routerLink]="['/in-progress']">
+    </button>
+    <br>
+
+    <button 
+      pButton 
+      type="button" 
+      severity="secondary" 
+      label="Paused" 
+      icon="pi pi-pause" 
+      class="botont"
+      [routerLink]="['/paused']">
+    </button>
+    <br>
+
+    <button 
+      pButton 
+      type="button" 
+      severity="secondary" 
+      label="Late" 
+      icon="pi pi-exclamation-triangle" 
+      class="botont"
+      [routerLink]="['/late']">
+    </button>
+    <br>
+
+    <button 
+      pButton 
+      type="button" 
+      severity="secondary" 
+      label="Finished" 
+      icon="pi pi-check-circle" 
+      class="botont"
+      [routerLink]="['/finished']">
+    </button>
   </div>
+</div>
+
   

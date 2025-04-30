@@ -1,9 +1,9 @@
 import {Component } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'to-do-list-page-inprogress',
-  imports: [],
+  imports: [ButtonModule],
   templateUrl: './To-do-list-page-inprogress.component.html',
-  styleUrl: './To-do-list-page-inprogress.component.css',
 })
 export class ToDoListPageInprogressComponent { }

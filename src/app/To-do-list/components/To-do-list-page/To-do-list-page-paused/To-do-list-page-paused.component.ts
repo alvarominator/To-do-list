@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {Component } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-to-do-list-page-paused',
-  imports: [],
+  selector: 'to-do-list-page-paused',
+  imports: [ButtonModule],
   templateUrl: './To-do-list-page-paused.component.html',
-  styleUrl: './To-do-list-page-paused.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToDoListPagePausedComponent { }

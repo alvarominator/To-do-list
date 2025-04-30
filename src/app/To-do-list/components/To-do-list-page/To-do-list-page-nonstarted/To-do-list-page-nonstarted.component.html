@@ -1,12 +1,60 @@
-<div>
-
+<div class="p-4">
     <h1>Non Started</h1>
-    <button 
-        pButton type="button" 
-        label="Add New Task" 
-        icon="pi pi-plus"
-        severity="contrast" 
-        class="botont">
-    </button>
-
-</div>
+  
+    <pbutton
+      pButton
+      type="button"
+      label="Add New Task"
+      icon="pi pi-plus"
+      severity="contrast"
+      (click)="openDialog()"
+      class="mb-3"
+    />
+  
+    <p-dialog
+      header="New Task"
+      [(visible)]="showDialog"
+      [modal]="true"
+      [closable]="true"
+      [style]="{ width: '30vw' }"
+    >
+      <div class="flex flex-col gap-3">
+        <input
+          type="text"
+          pInputText
+          placeholder="Title"
+          [(ngModel)]="newTask.title"
+        />
+  
+        <textarea
+          pInputTextarea
+          rows="3"
+          placeholder="Description"
+          [(ngModel)]="newTask.description"
+        ></textarea>
+  
+        <p-button
+          pButton
+          label="Save"
+          icon="pi pi-check"
+          (click)="saveTask()"
+        />
+      </div>
+    </p-dialog>
+  
+    @if (tasks.length > 0) {
+      <h3 class="mt-4">Tasks</h3>
+      <ul class="pl-4">
+        @for (task of tasks; track task) {
+          <li class="mb-2 border p-2 rounded shadow-sm">
+            <strong>{{ task.title }}</strong><br />
+            <small>{{ task.description }}</small>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="text-gray-500 mt-4">No tasks yet.</p>
+    }
+  </div>
+  
+  
