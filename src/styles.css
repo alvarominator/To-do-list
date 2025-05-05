@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+/* Estilos globales */
 @import "primeicons/primeicons.css";
 
 html, body {
@@ -6,10 +7,11 @@ html, body {
   padding: 0;
   height: 100%;
   overflow: hidden;
-  background-color: white; 
+  background-color: white;
   color: black;
-  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
+
 .sidebar {
   width: 16rem;
   background-color: #f3f4f6;
@@ -38,7 +40,7 @@ html, body {
 
 .main-content {
   flex: 1;
-  display: flex; 
+  display: flex;
   overflow: hidden;
   padding: 1.5rem;
   box-sizing: border-box;
@@ -55,5 +57,20 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow-y: auto; /* Scroll interno porsi*/
-  height: 100vh; 
+  height: 100vh;
+}
+
+/* Estilos para el panel de edición */
+.edit-task-panel {
+  position:fixed;
+  background-color: #f3f4f6;
+  box-sizing: border-box;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 300px; /* Ajusta el ancho según necesites */
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  z-index: 1000;
 }

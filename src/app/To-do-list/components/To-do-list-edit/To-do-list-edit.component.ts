@@ -1,10 +1,102 @@
-import {Component } from '@angular/core';
-import { ButtonModule, ButtonStyle } from 'primeng/button';
-import { TagModule } from 'primeng/tag';
+// src/app/To-do-list/components/To-do-list-edit/To-do-list-edit.component.ts
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { Textarea } from 'primeng/inputtextarea';
+import { CalendarModule } from 'primeng/calendar';
+import { ChipsModule } from 'primeng/chips';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { Task, Subtask } from '../../models/task.model';
+import { TaskService } from '../../services/task.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'to-do-list-edit',
-  imports: [TagModule, ButtonModule],
+  standalone: true,
   templateUrl: './To-do-list-edit.component.html',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    Textarea,
+    CalendarModule,
+    ChipsModule,
+    ButtonModule,
+    CheckboxModule
+  ]
 })
-export class ToDoListEditComponent { }
+export class ToDoListEditComponent implements OnInit {
+  @Input() task: Task | null = null; // Input para recibir la tarea a editar
+  @Output() closed = new EventEmitter<Task | null>(); // Output para emitir cuando se cierra el formulario
+
+  taskForm!: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    private taskService: TaskService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.initForm();
+  }
+
+  ngOnChanges(): void {
+    this.initForm(); // Volvemos a inicializar el formulario cuando cambia la tarea de entrada
+  }
+
+  initForm(): void {
+    this.taskForm = this.fb.group({
+      title: [this.task?.title || '', Validators.required],
+      description: [this.task?.description || ''],
+      dueDate: [this.task?.dueDate || null],
+      tags: [this.task?.tags || []],
+      subtasks: this.fb.array(
+        this.task?.subtasks?.map(s => this.fb.group({
+          title: [s.title],
+          isCompleted: [s.isCompleted]
+        })) || []
+      )
+    });
+  }
+
+  get subtasks(): FormArray {
+    return this.taskForm.get('subtasks') as FormArray;
+  }
+
+  addSubtask(): void {
+    this.subtasks.push(
+      this.fb.group({
+        title: [''],
+        isCompleted: [false]
+      })
+    );
+  }
+
+  removeSubtask(index: number): void {
+    this.subtasks.removeAt(index);
+  }
+
+  saveTask(): void {
+    if (this.taskForm.valid) {
+      const updatedTask: Task = {
+        id: this.task?.id || crypto.randomUUID(),
+        createdAt: this.task?.createdAt || new Date(),
+        updatedAt: new Date(),
+        status: this.task?.status || 'Non Started',
+        ...this.taskForm.value
+      };
+
+      this.taskService.updateTask(updatedTask);
+      this.closed.emit(updatedTask); // Emitimos la tarea actualizada
+      // No navegamos aquí, el componente padre manejará el cierre
+    }
+  }
+
+  closeForm(): void {
+    this.closed.emit(null); // Emitimos null para indicar que se cerró sin guardar
+  }
+}

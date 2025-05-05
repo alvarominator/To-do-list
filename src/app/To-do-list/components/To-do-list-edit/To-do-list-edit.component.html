@@ -1,33 +1,48 @@
-<div class="task-panel">
-    <div>
-      <h4>TASK:</h4>
+<div class="edit-task-panel" [formGroup]="taskForm">
+  <h2>Edit Task</h2>
 
-      <div>
-        <h5>
-
-          Description
-        </h5>
-    </div>
-  
-    <hr />
-    <div>
-      <div>
-        <h4>List:</h4>
-      </div>
-      <div>
-        <h4>Due date:</h4>
-      </div>
-      <div>
-        <h4>Tags:</h4>
-        <div>
-            <p-tag severity="secondary" value="Add Tag" [rounded]="true" />
-        </div>
-      </div>
-    </div>
-  
-    <div>
-      <h4>SUBTASKS:</h4>
-        <button pButton type="button" label="Add Subtask" icon="pi pi-plus" severity="secondary" class="botont"></button>
-    </div>
+  <div class="field">
+    <label for="title">Title</label>
+    <input id="title" pInputText formControlName="title" placeholder="Task title" />
   </div>
-  
+
+  <div class="field">
+    <label for="description">Description</label>
+    <textarea
+      id="description"
+      pInputTextarea
+      formControlName="description"
+      placeholder="Optional description"
+      rows="3"
+    ></textarea>
+  </div>
+
+  <div class="field">
+    <label for="dueDate">Due Date</label>
+    <p-calendar formControlName="dueDate" showIcon dateFormat="yy-mm-dd" inputId="dueDate" />
+  </div>
+
+  <div class="field">
+    <label for="tags">Tags</label>
+    <p-chips formControlName="tags" placeholder="Add tags"></p-chips>
+  </div>
+
+  <div formArrayName="subtasks" class="subtasks">
+    <h4>Subtasks</h4>
+
+    <div *ngFor="let subtask of subtasks.controls; let i = index" [formGroupName]="i" class="subtask-item">
+      <input pInputText formControlName="title" placeholder="Subtask title" />
+      <p-checkbox formControlName="isCompleted" binary label="Completed"></p-checkbox>
+      <button pButton icon="pi pi-times" (click)="removeSubtask(i)" severity="danger" rounded type="button"></button>
+    </div>
+
+    <button pButton type="button" label="Add Subtask" icon="pi pi-plus" (click)="addSubtask()" severity="secondary"></button>
+  </div>
+
+  <hr />
+
+  <div class="actions">
+    <button pButton type="button" label="Save Task" icon="pi pi-save" (click)="saveTask()" [disabled]="taskForm.invalid"></button>
+    <button pButton type="button" label="Cancel" icon="pi pi-times" class="p-button-secondary ml-2" (click)="closeForm()"></button>
+  </div>
+</div>

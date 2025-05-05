@@ -1,38 +1,62 @@
 import { Injectable } from '@angular/core';
-
-export interface Task {
-  id: number;
-  title: string;
-  description: string;
-  dueDate?: string;
-  list?: string;
-  tags?: string[];
-}
+import { Task } from '../models/task.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
-  private tasks: Task[] = [];
-  private selectedTask: Task | null = null;
+  private tasks: Task[] = this.loadTasks();
+  private tasksSubject = new BehaviorSubject<Task[]>(this.tasks);
+  tasks$ = this.tasksSubject.asObservable();
+  private readonly STORAGE_KEY = 'all-tasks'; // Una única clave para todas las tareas
 
-  getTasks(): Task[] {
-    return this.tasks;
+  constructor() { }
+
+  private loadTasks(): Task[] {
+    const storedTasks = localStorage.getItem(this.STORAGE_KEY);
+    return storedTasks ? JSON.parse(storedTasks) : [];
   }
 
-  addTask(task: Task) {
-    task.id = Date.now();
+  private saveTasks(): void {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.tasks));
+    this.tasksSubject.next(this.tasks);
+    console.log('Tareas guardadas:', this.tasks);
+  }
+
+  addTask(task: Task): void {
     this.tasks.push({ ...task });
+    this.saveTasks();
   }
 
-  updateTask(updated: Task) {
+  updateTask(updated: Task): void {
     const index = this.tasks.findIndex(t => t.id === updated.id);
-    if (index !== -1) this.tasks[index] = { ...updated };
+    if (index !== -1) {
+      updated.updatedAt = new Date();
+      this.tasks[index] = { ...updated };
+      this.saveTasks();
+    }
   }
 
-  selectTask(task: Task) {
+  deleteTask(id: string): void {
+    this.tasks = this.tasks.filter(task => task.id !== id);
+    this.saveTasks();
+  }
+
+  // Métodos adicionales para seleccionar tareas si los necesitas
+  private selectedTask: Task | null = null;
+  private selectedTaskSubject = new BehaviorSubject<Task | null>(null);
+  selectedTask$ = this.selectedTaskSubject.asObservable();
+
+  selectTask(task: Task): void {
     this.selectedTask = { ...task };
+    this.selectedTaskSubject.next({ ...task });
   }
 
   getSelectedTask(): Task | null {
-    return this.selectedTask;
+    return this.selectedTask ? { ...this.selectedTask } : null;
+  }
+
+  clearSelectedTask(): void {
+    this.selectedTask = null;
+    this.selectedTaskSubject.next(null);
   }
 }

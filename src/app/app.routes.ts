@@ -5,6 +5,7 @@ import { InProgressPageComponent } from './To-do-list/pages/in-progress-page/in-
 import { PausedPageComponent } from './To-do-list/pages/paused-page/paused-page.component';
 import { LatePageComponent } from './To-do-list/pages/late-page/late-page.component';
 import { FinishedPageComponent } from './To-do-list/pages/finished-page/finished-page.component';
+import { ToDoListEditComponent } from './To-do-list/components/To-do-list-edit/To-do-list-edit.component';
 
 export const routes: Routes = [
   {
@@ -16,7 +17,8 @@ export const routes: Routes = [
       { path: 'in-progress', component: InProgressPageComponent },
       { path: 'paused', component: PausedPageComponent },
       { path: 'late', component: LatePageComponent },
-      { path: 'finished', component: FinishedPageComponent }
+      { path: 'finished', component: FinishedPageComponent },
+      { path: 'edit-task', component: ToDoListEditComponent }
     ]
   },
   {
