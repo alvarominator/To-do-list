@@ -1,18 +1,18 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { DialogModule } from 'primeng/dialog';
 import { Textarea } from 'primeng/textarea';
+import { FormsModule } from '@angular/forms';
 import { Task } from '../../../models/task.model';
 import { ToDoListEditComponent } from '../../To-do-list-edit/To-do-list-edit.component';
 
 @Component({
   selector: 'to-do-list-page-late',
   standalone: true,
-  imports: [CommonModule, FormsModule, DialogModule, ButtonModule, InputTextModule, Textarea, ToDoListEditComponent],
-  templateUrl: './To-do-list-page-late.component.html',
+  imports: [CommonModule, ButtonModule, InputTextModule, DialogModule, Textarea, FormsModule, ToDoListEditComponent ],
+  templateUrl: './to-do-list-page-late.component.html',
 })
 export class ToDoListPageLateComponent implements OnInit, OnDestroy {
   tasks: Task[] = [];
@@ -81,6 +81,7 @@ export class ToDoListPageLateComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Nuevo método para manejar la eliminación de la tarea
   onTaskDeleted(taskToDelete: Task) {
     if (taskToDelete && taskToDelete.id) {
       this.tasks = this.tasks.filter(task => task.id !== taskToDelete.id);

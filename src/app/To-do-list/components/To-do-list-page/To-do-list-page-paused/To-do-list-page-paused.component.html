@@ -66,9 +66,10 @@
   
     @if (showEditForm && selectedTask) {
       <div class="edit-task-panel">
-        <to-do-list-edit [task]="selectedTask" (closed)="onEditFormClosed($event)"
-        (deleted)="onTaskDeleted($event)"
-        ></to-do-list-edit>
+        <to-do-list-edit
+          [task]="selectedTask"
+          (closed)="onEditFormClosed($event)"
+          (deleted)="onTaskDeleted($event)"  ></to-do-list-edit>
       </div>
     }
   </div>

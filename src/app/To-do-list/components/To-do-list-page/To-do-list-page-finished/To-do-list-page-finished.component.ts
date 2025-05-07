@@ -12,7 +12,7 @@ import { ToDoListEditComponent } from '../../To-do-list-edit/To-do-list-edit.com
   selector: 'to-do-list-page-finished',
   standalone: true,
   imports: [CommonModule, ButtonModule, InputTextModule, DialogModule, Textarea, FormsModule, ToDoListEditComponent],
-  templateUrl: './To-do-list-page-finished.component.html',
+  templateUrl: './to-do-list-page-finished.component.html',
 })
 export class ToDoListPageFinishedComponent implements OnInit, OnDestroy {
   tasks: Task[] = [];
@@ -78,6 +78,16 @@ export class ToDoListPageFinishedComponent implements OnInit, OnDestroy {
         this.tasks[index] = { ...taskUpdated };
         this.saveTasks(); // Guardar después de editar
       }
+    }
+  }
+
+  // Nuevo método para manejar la eliminación de la tarea
+  onTaskDeleted(taskToDelete: Task) {
+    if (taskToDelete && taskToDelete.id) {
+      this.tasks = this.tasks.filter(task => task.id !== taskToDelete.id);
+      this.saveTasks(); // Guardar la lista actualizada después de eliminar
+      this.selectedTask = null;
+      this.showEditForm = false;
     }
   }
 

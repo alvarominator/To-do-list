@@ -12,7 +12,7 @@ import { ToDoListEditComponent } from '../../To-do-list-edit/To-do-list-edit.com
   selector: 'to-do-list-page-inprogress',
   standalone: true,
   imports: [CommonModule, ButtonModule, InputTextModule, DialogModule, Textarea, FormsModule, ToDoListEditComponent],
-  templateUrl: './To-do-list-page-inprogress.component.html',
+  templateUrl: './to-do-list-page-inprogress.component.html',
 })
 export class ToDoListPageInprogressComponent implements OnInit, OnDestroy {
   tasks: Task[] = [];
@@ -29,7 +29,7 @@ export class ToDoListPageInprogressComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.saveTasks();
+    this.saveTasks(); // Guardar al salir del componente (o al recargar la página)
   }
 
   loadTasks() {
@@ -56,7 +56,7 @@ export class ToDoListPageInprogressComponent implements OnInit, OnDestroy {
     this.tasks.push({ ...this.newTask });
     this.showDialog = false;
     this.newTask = this.emptyTask('In Progress');
-    this.saveTasks();
+    this.saveTasks(); // Guardar inmediatamente después de añadir
   }
 
   editTask(task: Task) {
@@ -76,14 +76,16 @@ export class ToDoListPageInprogressComponent implements OnInit, OnDestroy {
       const index = this.tasks.findIndex(t => t.id === taskUpdated.id);
       if (index !== -1) {
         this.tasks[index] = { ...taskUpdated };
-        this.saveTasks();
+        this.saveTasks(); // Guardar después de editar
       }
     }
   }
+
+  // Nuevo método para manejar la eliminación de la tarea
   onTaskDeleted(taskToDelete: Task) {
     if (taskToDelete && taskToDelete.id) {
       this.tasks = this.tasks.filter(task => task.id !== taskToDelete.id);
-      this.saveTasks();
+      this.saveTasks(); // Guardar la lista actualizada después de eliminar
       this.selectedTask = null;
       this.showEditForm = false;
     }

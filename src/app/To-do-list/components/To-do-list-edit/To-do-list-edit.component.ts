@@ -9,7 +9,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { ChipsModule } from 'primeng/chips';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
-import { Task, Subtask } from '../../models/task.model';
+import { Task } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
 import { Router } from '@angular/router';
 
@@ -26,9 +26,10 @@ import { Router } from '@angular/router';
     ChipsModule,
     ButtonModule,
     CheckboxModule
-  ]
+  ],
+  providers: [TaskService],
 })
-export class ToDoListEditComponent implements OnInit, OnChanges {
+export class ToDoListEditComponent implements OnInit, OnChanges { // Implementamos OnChanges
   @Input() task: Task | null = null; // Input para recibir la tarea a editar
   @Output() closed = new EventEmitter<Task | null>(); // Output para emitir cuando se cierra el formulario
   @Output() deleted = new EventEmitter<Task>(); // Nuevo Output para emitir la tarea a eliminar
@@ -37,8 +38,8 @@ export class ToDoListEditComponent implements OnInit, OnChanges {
 
   constructor(
     private fb: FormBuilder,
-    private taskService: TaskService,
-    private router: Router
+    private taskService: TaskService, 
+    private router: Router 
   ) {}
 
   ngOnInit(): void {
