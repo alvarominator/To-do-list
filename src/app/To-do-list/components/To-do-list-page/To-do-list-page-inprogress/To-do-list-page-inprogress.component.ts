@@ -29,7 +29,7 @@ export class ToDoListPageInprogressComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.saveTasks(); // Guardar al salir del componente (o al recargar la página)
+    this.saveTasks();
   }
 
   loadTasks() {
@@ -56,7 +56,7 @@ export class ToDoListPageInprogressComponent implements OnInit, OnDestroy {
     this.tasks.push({ ...this.newTask });
     this.showDialog = false;
     this.newTask = this.emptyTask('In Progress');
-    this.saveTasks(); // Guardar inmediatamente después de añadir
+    this.saveTasks();
   }
 
   editTask(task: Task) {
@@ -76,8 +76,16 @@ export class ToDoListPageInprogressComponent implements OnInit, OnDestroy {
       const index = this.tasks.findIndex(t => t.id === taskUpdated.id);
       if (index !== -1) {
         this.tasks[index] = { ...taskUpdated };
-        this.saveTasks(); // Guardar después de editar
+        this.saveTasks();
       }
+    }
+  }
+  onTaskDeleted(taskToDelete: Task) {
+    if (taskToDelete && taskToDelete.id) {
+      this.tasks = this.tasks.filter(task => task.id !== taskToDelete.id);
+      this.saveTasks();
+      this.selectedTask = null;
+      this.showEditForm = false;
     }
   }
 

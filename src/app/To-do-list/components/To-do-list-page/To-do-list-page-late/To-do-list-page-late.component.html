@@ -1,4 +1,4 @@
-<div class="p-4 relative">
+<div class="Center">
     <h1>Late</h1>
   
     <p-button
@@ -44,14 +44,15 @@
   
     @if (tasks.length > 0) {
       <h3 class="mt-4">Late Tasks</h3>
-      <ul class="pl-4">
+      <ul>
         @for (task of tasks; track task.id) {
-          <li class="mb-2 border p-2 rounded shadow-sm flex items-center justify-between hover:bg-gray-100">
-            <div (click)="editTask(task)" class="cursor-pointer flex-grow">
+          <li class="task-item-layout">
+            <div (click)="editTask(task)" class="task-item-details">
               <strong>{{ task.title }}</strong><br />
               <small>{{ task.description }}</small>
             </div>
             <p-button
+              severity="secondary"
               icon="pi pi-pencil"
               styleClass="p-button-rounded p-button-sm"
               (click)="openEditForm(task)"
@@ -65,7 +66,9 @@
   
     @if (showEditForm && selectedTask) {
       <div class="edit-task-panel">
-        <to-do-list-edit [task]="selectedTask" (closed)="onEditFormClosed($event)"></to-do-list-edit>
+        <to-do-list-edit [task]="selectedTask" (closed)="onEditFormClosed($event)"
+        (deleted)="onTaskDeleted($event)"
+        ></to-do-list-edit>
       </div>
     }
   </div>

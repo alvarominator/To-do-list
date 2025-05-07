@@ -81,6 +81,15 @@ export class ToDoListPagePausedComponent implements OnInit, OnDestroy {
     }
   }
 
+  onTaskDeleted(taskToDelete: Task) {
+    if (taskToDelete && taskToDelete.id) {
+      this.tasks = this.tasks.filter(task => task.id !== taskToDelete.id);
+      this.saveTasks(); // Guardar la lista actualizada después de eliminar
+      this.selectedTask = null;
+      this.showEditForm = false;
+    }
+  }
+
   private emptyTask(status: 'Non Started' | 'In Progress' | 'Paused' | 'Late' | 'Finished'): Task {
     return {
       id: '',

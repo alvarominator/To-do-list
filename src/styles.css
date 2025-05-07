@@ -59,8 +59,27 @@ html, body {
   overflow-y: auto; /* Scroll interno porsi*/
   height: 100vh;
 }
+.Center{
+  width: 100%;
+  margin-left: 10%;
+  margin-right: auto;
+}
+.task-item-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem; 
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
 
-/* Estilos para el panel de edición */
+.task-item-details {
+  flex-grow: 1;
+  margin-right: 1rem; /* Ajusta el espacio entre el texto y el botón */
+  cursor: pointer; /* Añade un cursor para indicar que es clickable */
+}
+
 .edit-task-panel {
   position:fixed;
   background-color: #f3f4f6;
@@ -68,8 +87,10 @@ html, body {
   top: 0;
   right: 0;
   height: 100%;
-  width: 300px; /* Ajusta el ancho según necesites */
-  background-color: white;
+  width: 290px;
+  background-color: #f3f4f6;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 1rem;
   z-index: 1000;

@@ -1,5 +1,5 @@
 // src/app/To-do-list/components/To-do-list-edit/To-do-list-edit.component.ts
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core'; // Importamos OnChanges
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'to-do-list-edit',
   standalone: true,
-  templateUrl: './To-do-list-edit.component.html',
+  templateUrl: './to-do-list-edit.component.html',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -28,9 +28,10 @@ import { Router } from '@angular/router';
     CheckboxModule
   ]
 })
-export class ToDoListEditComponent implements OnInit {
+export class ToDoListEditComponent implements OnInit, OnChanges {
   @Input() task: Task | null = null; // Input para recibir la tarea a editar
   @Output() closed = new EventEmitter<Task | null>(); // Output para emitir cuando se cierra el formulario
+  @Output() deleted = new EventEmitter<Task>(); // Nuevo Output para emitir la tarea a eliminar
 
   taskForm!: FormGroup;
 
@@ -98,5 +99,12 @@ export class ToDoListEditComponent implements OnInit {
 
   closeForm(): void {
     this.closed.emit(null); // Emitimos null para indicar que se cerró sin guardar
+  }
+
+  deleteTask(): void {
+    if (this.task?.id) {
+      this.deleted.emit(this.task); // Emitimos la tarea actual para que el padre la elimine
+      this.closeForm(); // Cerramos el formulario después de solicitar la eliminación
+    }
   }
 }
