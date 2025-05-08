@@ -1,0 +1,6 @@
+<p-datePicker [inline]="true" [style]="{'width': '100%'}" (onSelect)="onDaySelect($event)"
+              [monthNavigator]="true" [yearNavigator]="true" yearRange="2020:2030">
+  <ng-template pTemplate="date" let-date>
+    <div [ngClass]="{'event-day': isEventDay(date)}">{{ date.day }}</div>
+  </ng-template>
+</p-datePicker>
