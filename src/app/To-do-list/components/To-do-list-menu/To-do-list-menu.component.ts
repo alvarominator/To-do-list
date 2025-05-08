@@ -9,6 +9,5 @@ import { ToDoListMenuFooterComponent } from "./To-do-list-menu-footer/To-do-list
   selector: 'to-do-list-menu',
   imports: [ToDoListMenuHeaderComponent, ToDoListMenuCategoriesComponent, ToDoListMenuTasksComponent, ToDoListMenuTagsComponent, ToDoListMenuFooterComponent],
   templateUrl: './To-do-list-menu.component.html',
-  styleUrl: './To-do-list-menu.component.css'
 })
 export class ToDoListMenuComponent { }

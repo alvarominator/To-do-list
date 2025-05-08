@@ -1,21 +1,18 @@
-// src/app/To-do-list/components/To-do-list-page/To-do-list-page-paused/To-do-list-page-paused.component.ts
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { DialogModule } from 'primeng/dialog';
 import { Textarea } from 'primeng/textarea';
-import { TaskService } from '../../../services/task.service';
+import { FormsModule } from '@angular/forms';
 import { Task } from '../../../models/task.model';
-import { Subscription } from 'rxjs';
 import { ToDoListEditComponent } from '../../To-do-list-edit/To-do-list-edit.component';
 
 @Component({
   selector: 'to-do-list-page-paused',
   standalone: true,
-  imports: [CommonModule, FormsModule, DialogModule, ButtonModule, InputTextModule, Textarea, ToDoListEditComponent],
-  templateUrl: './to-do-list-page-paused.component.html',
+  imports: [CommonModule, ButtonModule, InputTextModule, DialogModule, Textarea, FormsModule, ToDoListEditComponent],
+  templateUrl: './To-do-list-page-paused.component.html',
 })
 export class ToDoListPagePausedComponent implements OnInit, OnDestroy {
   tasks: Task[] = [];
@@ -23,24 +20,27 @@ export class ToDoListPagePausedComponent implements OnInit, OnDestroy {
   newTask: Task = this.emptyTask('Paused');
   showEditForm = false;
   selectedTask: Task | null = null;
-  private tasksSubscription?: Subscription;
+  private readonly STORAGE_KEY = 'paused-tasks'; // Clave para el Local Storage
 
-  constructor(
-    private taskService: TaskService,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
+  constructor() { }
 
   ngOnInit() {
-    this.tasksSubscription = this.taskService.tasks$.subscribe(allTasks => {
-      this.tasks = allTasks.filter(task => task.status === 'Paused');
-      this.changeDetectorRef.detectChanges();
-    });
+    this.loadTasks();
   }
 
   ngOnDestroy() {
-    if (this.tasksSubscription) {
-      this.tasksSubscription.unsubscribe();
-    }
+    this.saveTasks(); // Guardar al salir del componente (o al recargar la página)
+  }
+
+  loadTasks() {
+    const storedTasks = localStorage.getItem(this.STORAGE_KEY);
+    this.tasks = storedTasks ? JSON.parse(storedTasks) : [];
+    console.log('Tareas Paused cargadas:', this.tasks);
+  }
+
+  saveTasks() {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.tasks));
+    console.log('Tareas Paused guardadas:', this.tasks);
   }
 
   openDialog() {
@@ -50,10 +50,13 @@ export class ToDoListPagePausedComponent implements OnInit, OnDestroy {
 
   saveTask() {
     this.newTask.id = crypto.randomUUID();
-    this.newTask.createdAt = new Date();
-    this.newTask.updatedAt = new Date();
-    this.taskService.addTask(this.newTask);
+    const now = new Date();
+    this.newTask.createdAt = now;
+    this.newTask.updatedAt = now;
+    this.tasks.push({ ...this.newTask });
     this.showDialog = false;
+    this.newTask = this.emptyTask('Paused');
+    this.saveTasks(); // Guardar inmediatamente después de añadir
   }
 
   editTask(task: Task) {
@@ -70,14 +73,19 @@ export class ToDoListPagePausedComponent implements OnInit, OnDestroy {
     this.showEditForm = false;
     this.selectedTask = null;
     if (taskUpdated) {
-      this.taskService.updateTask(taskUpdated);
+      const index = this.tasks.findIndex(t => t.id === taskUpdated.id);
+      if (index !== -1) {
+        this.tasks[index] = { ...taskUpdated };
+        this.saveTasks(); // Guardar después de editar
+      }
     }
   }
 
-  // Asegúrate de que la firma de este método sea correcta
+  // Nuevo método para manejar la eliminación de la tarea
   onTaskDeleted(taskToDelete: Task) {
     if (taskToDelete && taskToDelete.id) {
-      this.taskService.deleteTask(taskToDelete.id);
+      this.tasks = this.tasks.filter(task => task.id !== taskToDelete.id);
+      this.saveTasks(); // Guardar la lista actualizada después de eliminar
       this.selectedTask = null;
       this.showEditForm = false;
     }

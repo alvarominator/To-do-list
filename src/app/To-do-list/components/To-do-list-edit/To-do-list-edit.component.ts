@@ -29,10 +29,10 @@ import { Router } from '@angular/router';
   ],
   providers: [TaskService],
 })
-export class ToDoListEditComponent implements OnInit, OnChanges { // Implementamos OnChanges
-  @Input() task: Task | null = null; // Input para recibir la tarea a editar
-  @Output() closed = new EventEmitter<Task | null>(); // Output para emitir cuando se cierra el formulario
-  @Output() deleted = new EventEmitter<Task>(); // Nuevo Output para emitir la tarea a eliminar
+export class ToDoListEditComponent implements OnInit, OnChanges { // // Implements the OnChanges interface
+  @Input() task: Task | null = null; // Input to receive the task to edit
+  @Output() closed = new EventEmitter<Task | null>(); // Output to emit when the form is closed
+  @Output() deleted = new EventEmitter<Task>();// New Output to emit the task to be deleted
 
   taskForm!: FormGroup;
 
@@ -47,7 +47,7 @@ export class ToDoListEditComponent implements OnInit, OnChanges { // Implementam
   }
 
   ngOnChanges(): void {
-    this.initForm(); // Volvemos a inicializar el formulario cuando cambia la tarea de entrada
+    this.initForm(); // Re-initializes the form when the input task changes
   }
 
   initForm(): void {
@@ -93,19 +93,19 @@ export class ToDoListEditComponent implements OnInit, OnChanges { // Implementam
       };
 
       this.taskService.updateTask(updatedTask);
-      this.closed.emit(updatedTask); // Emitimos la tarea actualizada
-      // No navegamos aquí, el componente padre manejará el cierre
+      this.closed.emit(updatedTask); // Emits the updated task
+           // No navigation here, the parent component will handle the closing
     }
   }
 
   closeForm(): void {
-    this.closed.emit(null); // Emitimos null para indicar que se cerró sin guardar
+    this.closed.emit(null); // Emits null to indicate that it was closed without saving
   }
 
   deleteTask(): void {
     if (this.task?.id) {
-      this.deleted.emit(this.task); // Emitimos la tarea actual para que el padre la elimine
-      this.closeForm(); // Cerramos el formulario después de solicitar la eliminación
+      this.deleted.emit(this.task); // Emits the current task for the parent to delete
+      this.closeForm(); // Closes the form after requesting deletion
     }
   }
 }

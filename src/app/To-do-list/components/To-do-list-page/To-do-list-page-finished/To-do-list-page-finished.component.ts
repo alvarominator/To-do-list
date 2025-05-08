@@ -20,7 +20,7 @@ export class ToDoListPageFinishedComponent implements OnInit, OnDestroy {
   newTask: Task = this.emptyTask('Finished');
   showEditForm = false;
   selectedTask: Task | null = null;
-  private readonly STORAGE_KEY = 'finished-tasks'; // Clave para el Local Storage
+  private readonly STORAGE_KEY = 'finished-tasks'; // Key for the Local Storage
 
   constructor() { }
 
@@ -29,7 +29,7 @@ export class ToDoListPageFinishedComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.saveTasks(); // Guardar al salir del componente (o al recargar la página)
+    this.saveTasks(); // Save when leaving the component (or on page reload)
   }
 
   loadTasks() {
@@ -56,7 +56,7 @@ export class ToDoListPageFinishedComponent implements OnInit, OnDestroy {
     this.tasks.push({ ...this.newTask });
     this.showDialog = false;
     this.newTask = this.emptyTask('Finished');
-    this.saveTasks(); // Guardar inmediatamente después de añadir
+    this.saveTasks(); // Save immediately after adding
   }
 
   editTask(task: Task) {
@@ -76,16 +76,16 @@ export class ToDoListPageFinishedComponent implements OnInit, OnDestroy {
       const index = this.tasks.findIndex(t => t.id === taskUpdated.id);
       if (index !== -1) {
         this.tasks[index] = { ...taskUpdated };
-        this.saveTasks(); // Guardar después de editar
+        this.saveTasks();  // Save after editing
       }
     }
   }
 
-  // Nuevo método para manejar la eliminación de la tarea
+ // New method to handle task deletion
   onTaskDeleted(taskToDelete: Task) {
     if (taskToDelete && taskToDelete.id) {
       this.tasks = this.tasks.filter(task => task.id !== taskToDelete.id);
-      this.saveTasks(); // Guardar la lista actualizada después de eliminar
+      this.saveTasks(); // Save the updated list after deleting
       this.selectedTask = null;
       this.showEditForm = false;
     }
