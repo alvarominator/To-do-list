@@ -1,0 +1,86 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f9fa; /* Light background color */
+}
+
+.card-container {
+  width: 100%;
+  max-width: 400px; /* Increased max width for better readability */
+  margin: auto;
+  margin-top: 2rem; /* Added some top margin */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-radius: 8px; /* Rounded corners */
+  padding: 1.5rem; /* Increased padding */
+  background-color: white; /* White card background */
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 1.5rem; /* Increased margin below title */
+  color: #343a40; /* Darker text color for title */
+}
+
+.form-field {
+  margin-bottom: 1rem; /* Increased margin between fields */
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #495057; /* Slightly darker label color */
+  font-weight: bold; /* Make labels bold */
+}
+
+.p-inputtext {
+  width: 100%;
+  padding: 0.75rem; /* Increased input padding */
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+.p-password {
+  width: 100%;
+}
+
+.p-error {
+  font-size: 0.8rem;
+  color: #dc3545; /* Standard error color */
+  margin-top: 0.25rem;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem; /* Increased button padding */
+  border-radius: 4px;
+  font-weight: bold;
+  color: white;
+  background-color: #007bff; /* Primary blue color */
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out; /* Smooth hover effect */
+}
+
+.submit-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.auth-error-message {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.toggle-mode {
+  margin-top: 1rem;
+  text-align: center;
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.toggle-mode:hover {
+  color: #0056b3;
+}

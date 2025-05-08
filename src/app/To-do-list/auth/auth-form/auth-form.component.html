@@ -1,0 +1,41 @@
+<div class="card-container">
+  <h2 class="form-title">{{ isRegisterMode() ? 'Register' : 'Login' }}</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="p-fluid">
+
+    <div class="form-field">
+      <label for="email" class="form-label">Email</label>
+      <input id="email" pInputText formControlName="email" type="email" class="p-inputtext" />
+      <small *ngIf="form.controls.email.invalid && form.controls.email.touched" class="p-error">
+        Valid email is required
+      </small>
+    </div>
+
+    <div class="form-field">
+      <label for="password" class="form-label">Password</label>
+      <p-password id="password" formControlName="password" toggleMask="true" feedback="false" class="p-password"></p-password>
+      <small *ngIf="form.controls.password.invalid && form.controls.password.touched" class="p-error">
+        Password is required
+      </small>
+    </div>
+
+    <div *ngIf="isRegisterMode()" class="form-field">
+      <label for="confirmPassword" class="form-label">Confirm Password</label>
+      <p-password id="confirmPassword" formControlName="confirmPassword" toggleMask="true" feedback="false" class="p-password"></p-password>
+      <small *ngIf="form.controls.confirmPassword.invalid && form.controls.confirmPassword.touched && isRegisterMode()" class="p-error">
+        Passwords must match
+      </small>
+    </div>
+
+    <button type="submit" pButton [label]="isRegisterMode() ? 'Register' : 'Login'" class="submit-button"
+      [disabled]="form.invalid">
+    </button>
+
+    <p-message *ngIf="authError" severity="error" [text]="isRegisterMode() ? 'Passwords must match or invalid data' : 'Invalid credentials'" class="auth-error-message"></p-message>
+  </form>
+
+  <div class="mt-3 text-center">
+    <a [routerLink]="isRegisterMode() ? '/login' : '/register'" class="toggle-mode">
+      {{ isRegisterMode() ? 'Already have an account? Log in here.' : 'Don’t have an account? Register here.' }}
+    </a>
+  </div>
+</div>
