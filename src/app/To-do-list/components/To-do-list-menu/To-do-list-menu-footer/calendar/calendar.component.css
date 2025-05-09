@@ -1,11 +1,11 @@
-.p-datepicker-calendar td.event-day a { /* Si PrimeNG añade un <a> */
+.p-datepicker-calendar td.event-day a {
   color: red !important;
 }
 
-.p-datepicker-calendar td.event-day { /* Si no hay un <a>, o si quieres cambiar el fondo */
+.p-datepicker-calendar td.event-day {
   color: red !important;
 }
 
-.event-day { /* Intenta esto si lo anterior no funciona */
+.event-day {
   color: red !important;
 }

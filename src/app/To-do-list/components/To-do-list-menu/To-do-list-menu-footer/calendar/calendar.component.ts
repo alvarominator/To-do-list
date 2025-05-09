@@ -23,7 +23,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.tasksSubscription = this.taskService.tasks$.subscribe(tasks => {
       this.tasksWithDueDate = tasks.filter(task => task.dueDate);
       this.eventDays = this.tasksWithDueDate.map(task => new Date(task.dueDate!));
-      console.log('eventDays:', this.eventDays); // Para depuración
+      console.log('eventDays:', this.eventDays);
     });
   }
 
