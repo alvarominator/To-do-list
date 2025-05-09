@@ -29,14 +29,28 @@
 
   <div formArrayName="subtasks" class="subtasks">
     <h4>Subtasks</h4>
-
     <div *ngFor="let subtask of subtasks.controls; let i = index" [formGroupName]="i" class="subtask-item">
       <input pInputText formControlName="title" placeholder="Subtask title" />
       <p-checkbox formControlName="isCompleted" binary label="Completed"></p-checkbox>
       <button pButton icon="pi pi-times" (click)="removeSubtask(i)" severity="danger" rounded type="button"></button>
     </div>
-
     <button pButton type="button" label="Add Subtask" icon="pi pi-plus" (click)="addSubtask()" severity="secondary"></button>
+  </div>
+
+  <div class="field">
+    <label for="category">Category</label>
+    <p-dropdown
+      formControlName="category"
+      [options]="categories"
+      optionLabel="name"
+      optionValue="id"
+      placeholder="Select a category"
+      inputId="category"
+    ></p-dropdown>
+     <div *ngIf="selectedCategory" class="selected-category">
+        <p-tag [value]="selectedCategory.name" severity="info"></p-tag>
+        <button pButton icon="pi pi-times" (click)="clearCategory()" severity="danger" size="small" class="p-button-rounded ml-2" type="button"></button>
+    </div>
   </div>
 
   <hr />
