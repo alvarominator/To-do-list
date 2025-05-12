@@ -32,7 +32,6 @@ import { Subscription } from 'rxjs';
     DropdownModule,
     TagModule,
   ],
-  // providers: [TaskService],
 })
 export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
   @Input() task: Task | null = null;
@@ -69,7 +68,7 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   initForm(): void {
-    // Inicializa selectedCategory basado en this.task
+    // Inicialize selectedCategory based in this.task
     let foundCategory: Category | undefined;
     if (this.task?.categories?.length) {
       foundCategory = this.categories.find(cat => this.task?.categories?.[0] && cat.id === this.task.categories[0]);

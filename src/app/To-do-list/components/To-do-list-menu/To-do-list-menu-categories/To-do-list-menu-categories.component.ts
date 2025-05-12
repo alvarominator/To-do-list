@@ -33,14 +33,14 @@ export class ToDoListMenuCategoriesComponent implements OnInit, OnDestroy {
 
   toggleAddCategoryInput(): void {
     this.showAddCategoryInput = !this.showAddCategoryInput;
-    this.newCategoryName = ''; // Limpiar el input al mostrar/ocultar
+    this.newCategoryName = ''; // Clear input when show/hide
   }
 
   addNewCategory(): void {
     if (this.newCategoryName.trim()) {
       this.categoryService.addCategory(this.newCategoryName);
-      this.newCategoryName = ''; // Limpiar el input después de añadir
-      this.showAddCategoryInput = false; // Ocultar el input después de añadir
+      this.newCategoryName = ''; // Clear input when adding
+      this.showAddCategoryInput = false; // Hide input after adding
     }
   }
 }
