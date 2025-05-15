@@ -7,7 +7,7 @@ export class TaskService {
   private tasks: Task[] = this.loadTasks();
   private tasksSubject = new BehaviorSubject<Task[]>(this.tasks);
   tasks$ = this.tasksSubject.asObservable();
-  private readonly STORAGE_KEY = 'all-tasks'; // Una única clave para todas las tareas
+  private readonly STORAGE_KEY = 'all-tasks';
 
   constructor() { }
 
@@ -39,24 +39,5 @@ export class TaskService {
   deleteTask(id: string): void {
     this.tasks = this.tasks.filter(task => task.id !== id);
     this.saveTasks();
-  }
-
-  // Métodos adicionales para seleccionar tareas si los necesitas
-  private selectedTask: Task | null = null;
-  private selectedTaskSubject = new BehaviorSubject<Task | null>(null);
-  selectedTask$ = this.selectedTaskSubject.asObservable();
-
-  selectTask(task: Task): void {
-    this.selectedTask = { ...task };
-    this.selectedTaskSubject.next({ ...task });
-  }
-
-  getSelectedTask(): Task | null {
-    return this.selectedTask ? { ...this.selectedTask } : null;
-  }
-
-  clearSelectedTask(): void {
-    this.selectedTask = null;
-    this.selectedTaskSubject.next(null);
   }
 }

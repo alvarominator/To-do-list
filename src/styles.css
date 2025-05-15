@@ -56,13 +56,16 @@ html, body {
   border-bottom-left-radius: 1rem;
   display: flex;
   flex-direction: column;
-  overflow-y: auto; /* Scroll interno porsi*/
+  overflow-y: auto; /* Scroll */
   height: 100vh;
 }
 .Center{
   width: 100%;
   margin-left: 10%;
   margin-right: auto;
+}
+.cursor{
+  cursor: pointer;
 }
 .task-item-layout {
   display: flex;
@@ -76,8 +79,8 @@ html, body {
 
 .task-item-details {
   flex-grow: 1;
-  margin-right: 1rem; /* Ajusta el espacio entre el texto y el botón */
-  cursor: pointer; /* Añade un cursor para indicar que es clickable */
+  margin-right: 1rem;
+  cursor: pointer;
 }
 
 .edit-task-panel {

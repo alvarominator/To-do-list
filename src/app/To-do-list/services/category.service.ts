@@ -37,4 +37,8 @@ export class CategoryService {
   getCategories(): Observable<Category[]> {
     return this.categories$;
   }
+
+  getCategoryById(id: string): Category | undefined {
+    return this.categories.find(category => category.id === id);
+  }
 }

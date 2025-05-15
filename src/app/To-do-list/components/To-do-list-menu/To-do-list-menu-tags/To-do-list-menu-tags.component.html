@@ -1,7 +1,25 @@
-
-
-<div class="p-3">
-    <h3 class="titu">Tags</h3>
+<div class="tags-container">
+  <p-chip class="cursor"
+    label="Add new tag"
+    icon="pi pi-plus"
+    (click)="showAddDialog()"
+  ></p-chip>
+  <p-tag
+    *ngFor="let tag of tagsCreated; let i = index"
+    severity="secondary"
+    [rounded]="true"
+    [value]="tag"
+    (onRemove)="removeTag(tag)"
+  ></p-tag>
 </div>
 
-<p-tag severity="secondary" value="Add New Tag" [rounded]="true" />
+<p-dialog header="Add New Tag" [(visible)]="displayDialog" [modal]="true" [style]="{ width: '300px' }">
+  <div class="p-field">
+    <label for="newTagName">Tag Name</label>
+    <input type="text" id="newTagName" pInputText [(ngModel)]="newTagName" />
+  </div>
+  <div class="p-dialog-footer">
+    <button pButton type="button" label="Cancel" (click)="displayDialog = false"></button>
+    <button pButton type="button" label="Add" (click)="addTag()"></button>
+  </div>
+</p-dialog>
