@@ -43,13 +43,36 @@
   </p-dialog>
 
   @if (tasks.length > 0) {
-    <h3 class="mt-4">Non Started Tasks</h3>
+    <h3>Non Started Tasks</h3>
     <ul>
       @for (task of tasks; track task.id) {
         <li class="task-item-layout">
           <div (click)="editTask(task)" class="task-item-details">
             <strong>{{ task.title }}</strong><br />
-            <small>{{ task.description }}</small>
+            <small>{{ task.description }}</small><br />
+            <small
+              >Due Date:
+              {{ task.dueDate ? (task.dueDate | date : "yyyy-MM-dd") : "No Due Date" }}</small
+            >
+            <div class="task-categories-tags">
+              <span
+                *ngIf="task.categories && task.categories.length > 0"
+                class="category"
+              >
+                Categories:
+                <span *ngFor="let categoryId of task.categories">
+                  {{ getCategoryName(categoryId) }}
+                </span>
+              </span>
+              <span *ngIf="task.tags && task.tags.length > 0" class="tags">
+                Tags:
+                <p-tag
+                  *ngFor="let tag of task.tags"
+                  severity="info"
+                  [value]="tag"
+                ></p-tag>
+              </span>
+            </div>
           </div>
           <p-button
             severity="secondary"
@@ -66,8 +89,10 @@
 
   @if (showEditForm && selectedTask) {
     <div class="edit-task-panel">
-      <to-do-list-edit [task]="selectedTask" (closed)="onEditFormClosed($event)"
-      (deleted)="onTaskDeleted($event)"
+      <to-do-list-edit
+        [task]="selectedTask"
+        (closed)="onEditFormClosed($event)"
+        (deleted)="onTaskDeleted($event)"
       ></to-do-list-edit>
     </div>
   }
