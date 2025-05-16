@@ -13,4 +13,5 @@ export interface Task {
   subtasks?: Subtask[];
   createdAt: Date;
   updatedAt: Date;
+  categories?: string[];
 }

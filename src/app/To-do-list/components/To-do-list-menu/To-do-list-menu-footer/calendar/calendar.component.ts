@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { TaskService } from '../../../../services/task.service';
 import { Task } from '../../../../models/task.model';
 import { Subscription } from 'rxjs';
@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
   imports: [DatePickerModule, CommonModule]
 })
 export class CalendarComponent implements OnInit, OnDestroy {
+  @Output() dateSelected = new EventEmitter<Date>();
   tasksWithDueDate: Task[] = [];
   eventDays: Date[] = [];
   tasksSubscription?: Subscription;
@@ -35,18 +36,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   isEventDay = (date: Date): boolean => {
     return this.eventDays.some(eventDate =>
-      eventDate.toDateString() === date.toDateString()
+      eventDate.getFullYear() === date.getFullYear() &&
+      eventDate.getMonth() === date.getMonth() &&
+      eventDate.getDate() === date.getDate()
     );
   };
 
   onDaySelect(event: any): void {
-    const selectedDate = event.date;
-    const tasksOnSelectedDate = this.tasksWithDueDate.filter(
-      task => new Date(task.dueDate!).toDateString() === selectedDate.toDateString()
-    );
-    if (tasksOnSelectedDate.length > 0) {
-      console.log('Tareas para el', selectedDate, ':', tasksOnSelectedDate);
-      // Aquí podrías emitir un evento al footer para mostrar las tareas
-    }
+    this.dateSelected.emit(event.date);
   }
 }

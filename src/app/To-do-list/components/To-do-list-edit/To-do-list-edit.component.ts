@@ -1,6 +1,6 @@
-// src/app/To-do-list/components/To-do-list-edit/To-do-list-edit.component.ts
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core'; // Importamos OnChanges
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+// src/app/To-do-list/components/to-do-list-edit/to-do-list-edit.component.ts
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -8,10 +8,14 @@ import { Textarea } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
 import { ChipsModule } from 'primeng/chips';
 import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
+import { DropdownModule } from 'primeng/dropdown';
+import { TagModule } from 'primeng/tag';
 import { Task } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
 import { Router } from '@angular/router';
+import { CategoryService } from '../../services/category.service';
+import { Category } from '../../models/category.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'to-do-list-edit',
@@ -25,37 +29,58 @@ import { Router } from '@angular/router';
     CalendarModule,
     ChipsModule,
     ButtonModule,
-    CheckboxModule
+    DropdownModule,
+    TagModule,
   ],
-  providers: [TaskService],
 })
-export class ToDoListEditComponent implements OnInit, OnChanges { // // Implements the OnChanges interface
-  @Input() task: Task | null = null; // Input to receive the task to edit
-  @Output() closed = new EventEmitter<Task | null>(); // Output to emit when the form is closed
-  @Output() deleted = new EventEmitter<Task>();// New Output to emit the task to be deleted
+export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() task: Task | null = null;
+  @Output() closed = new EventEmitter<Task | null>();
+  @Output() deleted = new EventEmitter<Task>();
 
   taskForm!: FormGroup;
+  categories: Category[] = [];
+  categoriesSubscription?: Subscription;
+  selectedCategory: Category | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private taskService: TaskService, 
-    private router: Router 
+    private taskService: TaskService,
+    private router: Router,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {
-    this.initForm();
+    this.categoriesSubscription = this.categoryService.getCategories().subscribe(categories => {
+      this.categories = categories;
+      this.initForm();
+    });
   }
 
   ngOnChanges(): void {
-    this.initForm(); // Re-initializes the form when the input task changes
+    this.initForm();
+  }
+
+  ngOnDestroy(): void {
+    if (this.categoriesSubscription) {
+      this.categoriesSubscription.unsubscribe();
+    }
   }
 
   initForm(): void {
+    // Inicialize selectedCategory based in this.task
+    let foundCategory: Category | undefined;
+    if (this.task?.categories?.length) {
+      foundCategory = this.categories.find(cat => this.task?.categories?.[0] && cat.id === this.task.categories[0]);
+    }
+    this.selectedCategory = foundCategory ? foundCategory : null;
+
     this.taskForm = this.fb.group({
       title: [this.task?.title || '', Validators.required],
       description: [this.task?.description || ''],
       dueDate: [this.task?.dueDate || null],
       tags: [this.task?.tags || []],
+      category: [this.selectedCategory],
       subtasks: this.fb.array(
         this.task?.subtasks?.map(s => this.fb.group({
           title: [s.title],
@@ -82,30 +107,41 @@ export class ToDoListEditComponent implements OnInit, OnChanges { // // Implemen
     this.subtasks.removeAt(index);
   }
 
+  clearCategory(): void {
+    this.selectedCategory = null;
+    this.taskForm.get('category')?.setValue(null);
+  }
+
   saveTask(): void {
     if (this.taskForm.valid) {
+      const selectedCategoryId = this.taskForm.value.category ? [this.taskForm.value.category.id] : [];
+
       const updatedTask: Task = {
         id: this.task?.id || crypto.randomUUID(),
         createdAt: this.task?.createdAt || new Date(),
         updatedAt: new Date(),
-        status: this.task?.status || 'Non Started',
-        ...this.taskForm.value
+        status: this.taskForm.value.status || 'Non Started',
+        title: this.taskForm.value.title,
+        description: this.taskForm.value.description,
+        dueDate: this.taskForm.value.dueDate,
+        tags: [this.taskForm.value.tags || []],
+        subtasks: this.taskForm.value.subtasks,
+        categories: selectedCategoryId,
       };
 
       this.taskService.updateTask(updatedTask);
-      this.closed.emit(updatedTask); // Emits the updated task
-           // No navigation here, the parent component will handle the closing
+      this.closed.emit(updatedTask);
     }
   }
 
   closeForm(): void {
-    this.closed.emit(null); // Emits null to indicate that it was closed without saving
+    this.closed.emit(null);
   }
 
   deleteTask(): void {
     if (this.task?.id) {
-      this.deleted.emit(this.task); // Emits the current task for the parent to delete
-      this.closeForm(); // Closes the form after requesting deletion
+      this.deleted.emit(this.task);
+      this.closeForm();
     }
   }
 }

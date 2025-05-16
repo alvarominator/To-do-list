@@ -1,5 +1,16 @@
 <div class="p-3">
-    <h3 class="titu">Categories</h3>
-    <button pButton type="button" label="Add New Category" icon="pi pi-plus" severity="secondary" class="botont"></button>
+  <h3 class="titu">Categories</h3>
+  <button pButton type="button" label="Add New Category" icon="pi pi-plus" severity="secondary" class="botont" (click)="toggleAddCategoryInput()"></button>
+
+  <div *ngIf="showAddCategoryInput" class="mt-2">
+    <div class="flex align-items-center">
+      <input type="text" pInputText [(ngModel)]="newCategoryName" placeholder="Category Name" class="mr-2">
+      <button pButton type="button" label="Add" icon="pi pi-check" (click)="addNewCategory()" severity="success"></button>
+    </div>
   </div>
-  
+
+  <ul class="mt-3" *ngIf="categories.length > 0">
+    <li *ngFor="let category of categories">{{ category.name }}</li>
+  </ul>
+  <p class="mt-3" *ngIf="categories.length === 0 && !showAddCategoryInput">No hay categorías creadas.</p>
+</div>
