@@ -1,46 +1,205 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { CategoryService } from '../../../services/category.service';
-import { Category } from '../../../models/category.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
+import { DialogModule } from 'primeng/dialog';
+import { MessageService } from 'primeng/api';
+import { Category } from '../../../models/category.model';
+import { CategoryService } from '../../../services/category.service';
 
 @Component({
-  selector: 'to-do-list-menu-categories',
-  imports: [ButtonModule, FormsModule, CommonModule],
-  templateUrl: './To-do-list-menu-categories.component.html',
+    selector: 'to-do-list-menu-categories',
+    imports: [InputTextModule, FormsModule, ButtonModule, CommonModule, DialogModule],
+    templateUrl: 'to-do-list-menu-categories.component.html',
+    styleUrls: ['./To-do-list-menu-categories.component.css'], // Importar el archivo CSS
+    providers: [MessageService]
 })
 export class ToDoListMenuCategoriesComponent implements OnInit, OnDestroy {
-  newCategoryName: string = '';
-  categories: Category[] = [];
-  showAddCategoryInput: boolean = false;
-  categoriesSubscription?: Subscription;
+    @Output() categoryAdded = new EventEmitter<string>();
+    @Output() categoryRemoved = new EventEmitter<string>();
+    existingCategories: Category[] = [];
+    newCategoryName: string = '';
+    displayDialog: boolean = false;
+    private destroy$ = new Subject<void>();
 
-  constructor(private categoryService: CategoryService) {}
+    constructor(
+        private categoryService: CategoryService,
+        private messageService: MessageService
+    ) { }
 
-  ngOnInit(): void {
-    this.categoriesSubscription = this.categoryService.getCategories().subscribe(categories => {
-      this.categories = categories;
-    });
-  }
-
-  ngOnDestroy(): void {
-    if (this.categoriesSubscription) {
-      this.categoriesSubscription.unsubscribe();
+    ngOnInit(): void {
+        this.categoryService.getCategories().pipe(takeUntil(this.destroy$)).subscribe(categories => {
+            this.existingCategories = categories;
+        });
     }
-  }
 
-  toggleAddCategoryInput(): void {
-    this.showAddCategoryInput = !this.showAddCategoryInput;
-    this.newCategoryName = ''; // Clear input when show/hide
-  }
-
-  addNewCategory(): void {
-    if (this.newCategoryName.trim()) {
-      this.categoryService.addCategory(this.newCategoryName);
-      this.newCategoryName = ''; // Clear input when adding
-      this.showAddCategoryInput = false; // Hide input after adding
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
+
+    showAddDialog(): void {
+        this.newCategoryName = '';
+        this.displayDialog = true;
+    }
+
+    addCategory(): void {
+        const trimmedCategoryName = this.newCategoryName.trim();
+        if (trimmedCategoryName && !this.existingCategories.some(cat => cat.name === trimmedCategoryName)) {
+            this.categoryService.addCategory(trimmedCategoryName);
+            this.categoryAdded.emit(trimmedCategoryName);
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Categoría Añadida',
+                detail: `La categoría "${trimmedCategoryName}" ha sido añadida.`,
+                life: 3000
+            });
+            this.loadCategories();
+        } else if (this.existingCategories.some(cat => cat.name === trimmedCategoryName)) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: `La categoría "${trimmedCategoryName}" ya existe.`,
+                life: 3000
+            });
+        } else {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: `El nombre de la categoría no puede estar vacío.`,
+                life: 3000
+            });
+        }
+        this.displayDialog = false;
+        this.newCategoryName = '';
+    }
+
+    removeCategory(categoryToRemove: Category): void {
+        this.categoryService.deleteCategory(categoryToRemove.id);
+        this.categoryRemoved.emit(categoryToRemove.name);
+        this.messageService.add({
+            severity: 'warn',
+            summary: 'Categoría Eliminada',
+            detail: `La categoría "${categoryToRemove.name}" ha sido eliminada.`,
+            life: 3000
+        });
+        this.loadCategories();
+    }
+
+    loadCategories(): void {
+        this.categoryService
+            .getCategories()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((categories) => {
+                this.existingCategories = categories;
+            });
+    }
+}
+
+
+
+
+
+/* import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Subject, takeUntil } from 'rxjs';
+import { DialogModule } from 'primeng/dialog';
+import { ChipModule } from 'primeng/chip';
+import { MessageService } from 'primeng/api';
+import { Category } from '../../../models/category.model';
+import { CategoryService } from '../../../services/category.service';
+@Component({
+    selector: 'to-do-list-menu-categories', // Selector actualizado
+    imports: [InputTextModule, FormsModule, ButtonModule, CommonModule, DialogModule, ChipModule],
+    templateUrl: 'To-do-list-menu-categories.component.html', // Asegúrate de que la ruta es correcta
+    providers: [MessageService]
+})
+export class ToDoListMenuCategoriesComponent implements OnInit, OnDestroy {
+    @Output() categoryAdded = new EventEmitter<string>();
+    @Output() categoryRemoved = new EventEmitter<string>();
+    existingCategories: Category[] = []; // Cambiado a Category[]
+    newCategoryName: string = '';
+    displayDialog: boolean = false;
+    private destroy$ = new Subject<void>();
+
+    constructor(
+        private categoryService: CategoryService,
+        private messageService: MessageService
+    ) { }
+
+    ngOnInit(): void {
+        this.categoryService.getCategories().pipe(takeUntil(this.destroy$)).subscribe(categories => {
+            this.existingCategories = categories;
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
+    showAddDialog(): void {
+        this.newCategoryName = '';
+        this.displayDialog = true;
+    }
+
+    addCategory(): void {
+        const trimmedCategoryName = this.newCategoryName.trim();
+        if (trimmedCategoryName && !this.existingCategories.some(cat => cat.name === trimmedCategoryName)) {
+            this.categoryService.addCategory(trimmedCategoryName); // Llama al servicio para añadir la categoría
+            this.categoryAdded.emit(trimmedCategoryName);
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Categoría Añadida',
+                detail: `La categoría "${trimmedCategoryName}" ha sido añadida.`,
+                life: 3000
+            });
+             this.loadCategories();
+        } else if (this.existingCategories.some(cat => cat.name === trimmedCategoryName)) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: `La categoría "${trimmedCategoryName}" ya existe.`,
+                life: 3000
+            });
+        }
+        else {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: `El nombre de la categoría no puede estar vacío.`,
+                life: 3000
+            });
+        }
+        this.displayDialog = false;
+        this.newCategoryName = '';
+    }
+
+    removeCategory(categoryToRemove: Category): void {
+        this.categoryService.deleteCategory(categoryToRemove.id);
+        this.categoryRemoved.emit(categoryToRemove.name);
+        this.messageService.add({
+            severity: 'warn',
+            summary: 'Categoría Eliminada',
+            detail: `La categoría "${categoryToRemove.name}" ha sido eliminada.`,
+            life: 3000
+        });
+         this.loadCategories();
+    }
+
+     loadCategories(): void {
+    this.categoryService
+      .getCategories()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((categories) => {
+        this.existingCategories = categories;
+      });
   }
 }
+
+ */

@@ -1,3 +1,4 @@
+// category.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Category } from '../models/category.model';
@@ -37,6 +38,12 @@ export class CategoryService {
   getCategories(): Observable<Category[]> {
     return this.categories$;
   }
+
+    deleteCategory(id: string): void {
+        this.categories = this.categories.filter(category => category.id !== id);
+        this.saveCategories();
+    }
+
 
   getCategoryById(id: string): Category | undefined {
     return this.categories.find(category => category.id === id);
