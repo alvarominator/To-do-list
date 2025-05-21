@@ -1,16 +1,47 @@
-<div class="p-3">
-  <h3 class="titu">Categories</h3>
-  <button pButton type="button" label="Add New Category" icon="pi pi-plus" severity="secondary" class="botont" (click)="toggleAddCategoryInput()"></button>
-
-  <div *ngIf="showAddCategoryInput" class="mt-2">
-    <div class="flex align-items-center">
-      <input type="text" pInputText [(ngModel)]="newCategoryName" placeholder="Category Name" class="mr-2">
-      <button pButton type="button" label="Add" icon="pi pi-check" (click)="addNewCategory()" severity="success"></button>
+<div class="flex flex-col">
+    <p-button (click)="showAddDialog()" label="Add New Category" severity="secondary" icon="pi pi-plus" class="mb-2"></p-button>
+    <div class="category-list">
+        <ng-container *ngFor="let category of existingCategories">
+            <div class="category-card">
+                <div class="category-name">{{category.name}}</div>
+                <button (click)="removeCategory(category)" class="remove-button">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+        </ng-container>
     </div>
-  </div>
-
-  <ul class="mt-3" *ngIf="categories.length > 0">
-    <li *ngFor="let category of categories">{{ category.name }}</li>
-  </ul>
-  <p class="mt-3" *ngIf="categories.length === 0 && !showAddCategoryInput">No hay categorías creadas.</p>
+    <p-dialog header="Add Category" [(visible)]="displayDialog" [modal]="true" [style]="{ width: '300px' }">
+        <div class="p-fluid">
+            <div class="field">
+                <label for="newCategoryName">Name of the Category</label>
+                <input type="text" id="newCategoryName" [(ngModel)]="newCategoryName" pInputText />
+            </div>
+        </div>
+        <ng-template pTemplate="footer">
+            <p-button (click)="addCategory()" label="Add" icon="pi pi-plus"></p-button>
+            <p-button (click)="displayDialog = false" label="Cancel" styleClass="p-button-secondary"></p-button>
+        </ng-template>
+    </p-dialog>
 </div>
+
+<!-- <div class="flex flex-col">
+    <p-button (click)="showAddDialog()" label="Añadir Categoría" severity="secondary" icon="pi pi-plus" class="mb-2"></p-button>
+    <div class="flex flex-wrap gap-2">
+        <ng-container *ngFor="let category of existingCategories">
+            <p-chip [label]="category.name" (onRemove)="removeCategory(category)" removable class="cursor-pointer"></p-chip>
+        </ng-container>
+    </div>
+    <p-dialog header="Añadir Categoría" [(visible)]="displayDialog" [modal]="true" [style]="{ width: '300px' }">
+        <div class="p-fluid">
+            <div class="field">
+                <label for="newCategoryName">Nombre de la Categoría</label>
+                <input type="text" id="newCategoryName" [(ngModel)]="newCategoryName" pInputText />
+            </div>
+        </div>
+        <ng-template pTemplate="footer">
+            <p-button (click)="addCategory()" label="Añadir" icon="pi pi-plus"></p-button>
+            <p-button (click)="displayDialog = false" label="Cancelar" styleClass="p-button-secondary"></p-button>
+        </ng-template>
+    </p-dialog>
+</div>
+ -->
