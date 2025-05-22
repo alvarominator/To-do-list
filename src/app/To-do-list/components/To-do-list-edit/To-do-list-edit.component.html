@@ -1,72 +1,71 @@
 <div class="edit-task-panel" [formGroup]="taskForm">
-  <h2>Edit Task</h2>
+    <h2>Edit Task</h2>
 
-  <div class="field w-100 m-5">
-    <label for="title">Title</label>
-    <input class="w-100" id="title" pInputText formControlName="title" placeholder="Task title" />
-  </div>
-
-  <div class="field m-5">
-    <label for="description">Description</label>
-    <textarea
-      class=" w-100"
-      id="description"
-      pInputTextarea
-      formControlName="description"
-      placeholder="Optional description"
-      rows="3"
-    ></textarea>
-  </div>
-
-  <div class="field w-100 m-5">
-    <label for="dueDate">Due Date</label>
-    <p-calendar formControlName="dueDate" showIcon dateFormat="yy-mm-dd" inputId="dueDate" />
-  </div>
-
-  <div class="field w-100 m-5">
-    <label for="tags">Tags</label>
-    <p-chips formControlName="tags" placeholder="Add tags"></p-chips>
-  </div>
-
-  <div formArrayName="subtasks" class="subtasks w-100 m-5">
-    <div>
-      <label for="Subtasks">Subtasks</label>
+    <div class="field">
+        <label for="title">Title</label>
+        <input id="title" pInputText formControlName="title" placeholder="Task title" />
     </div>
-    <button pButton type="button" label="Add Subtask" icon="pi pi-plus" (click)="addSubtask()" severity="secondary"></button>
-    <div *ngFor="let subtask of subtasks.controls; let i = index" [formGroupName]="i" class="subtask-item">
-      <input pInputText formControlName="title" placeholder="Subtask title" />
-      <p-checkbox formControlName="isCompleted" binary label="Completed"></p-checkbox>
-      <button pButton icon="pi pi-times" (click)="removeSubtask(i)" severity="danger" rounded type="button"></button>     
+
+    <div class="field">
+        <label for="description">Description</label>
+        <textarea
+            id="description"
+            pInputTextarea
+            formControlName="description"
+            placeholder="Optional description"
+            rows="3"
+        ></textarea>
     </div>
-    
-  </div>
 
-  <div class="field w-100 m-5">
-    <label for="category">Category</label>
-    <div>
-
+    <div class="field">
+        <label for="dueDate">Due Date</label>
+        <p-calendar formControlName="dueDate" showIcon dateFormat="yy-mm-dd" inputId="dueDate" />
     </div>
-    <p-dropdown
-      formControlName="category"
-      [options]="categories"
-      optionLabel="name"
-      optionValue="id"
-      placeholder="Select a category"
-      inputId="category"
-    ></p-dropdown>
-     <div *ngIf="selectedCategory" class="selected-category">
-        <p-tag [value]="selectedCategory.name" severity="info"></p-tag>
-        <button pButton icon="pi pi-times" (click)="clearCategory()" severity="danger" size="small" class="p-button-rounded ml-2" type="button"></button>
+
+    <div class="field">
+        <label for="tags">Tags</label>
+        <p-multiSelect
+            formControlName="tags"
+            [options]="availableTags"
+            placeholder="Select Tags"
+            [filter]="true"
+            [showClear]="true"
+            [maxSelectedLabels]="3"
+            display="chip"
+        ></p-multiSelect>
     </div>
-  </div>
 
-  <hr />
+    <div formArrayName="subtasks" class="subtasks">
+        <h4>Subtasks</h4>
+        <div *ngFor="let subtask of subtasks.controls; let i = index" [formGroupName]="i" class="subtask-item">
+            <input pInputText formControlName="title" placeholder="Subtask title" />
+            <p-checkbox formControlName="isCompleted" binary label="Completed"></p-checkbox>
+            <button pButton icon="pi pi-times" (click)="removeSubtask(i)" severity="danger" rounded type="button"></button>
+        </div>
+        <button pButton type="button" label="Add Subtask" icon="pi pi-plus" (click)="addSubtask()" severity="secondary"></button>
+    </div>
 
-  <div class="actions">
-    <button pButton type="button" label="Save Task" icon="pi pi-save" (click)="saveTask()" class="w-100 m-5" [disabled]="taskForm.invalid"></button>
-    <button pButton type="button" label="Cancel" icon="pi pi-times" class="p-button-secondary w-100 m-5" (click)="closeForm()"></button>
-    <button pButton type="button" label="Delete Task" icon="pi pi-times" class="p-button-danger w-100 m-5" (click)="deleteTask()"></button>
-  </div>
+    <div class="field">
+        <label for="categories">Categories</label>
+        <p-multiSelect
+            formControlName="categories"
+            [options]="categories"
+            optionLabel="name"
+            placeholder="Select Categories"
+            [filter]="true"
+            [showClear]="true"
+            [maxSelectedLabels]="3"
+            display="chip"
+        ></p-multiSelect>
+    </div>
+
+    <hr />
+
+    <div class="actions">
+        <button pButton type="button" label="Save Task" icon="pi pi-save" (click)="saveTask()" [disabled]="taskForm.invalid"></button>
+        <button pButton type="button" label="Cancel" icon="pi pi-times" class="p-button-secondary ml-2" (click)="closeForm()"></button>
+        <button pButton type="button" label="Delete Task" icon="pi pi-times" class="p-button-danger" (click)="deleteTask()"></button>
+    </div>
 </div>
 
 

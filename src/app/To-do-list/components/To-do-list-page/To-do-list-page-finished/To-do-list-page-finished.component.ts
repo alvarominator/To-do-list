@@ -1,6 +1,6 @@
 // src/app/To-do-list/components/to-do-list-page-finished/to-do-list-page-finished.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule, DatePipe, NgIf } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
@@ -33,9 +33,9 @@ export class ToDoListPageFinishedComponent implements OnInit, OnDestroy {
     constructor(private datePipe: DatePipe, private categoryService: CategoryService) { }
 
     ngOnInit() {
-        this.loadTasks();
         this.categoriesSubscription = this.categoryService.getCategories().subscribe(categories => {
             this.categories = categories;
+            this.loadTasks();
         });
     }
 
@@ -48,12 +48,28 @@ export class ToDoListPageFinishedComponent implements OnInit, OnDestroy {
 
     loadTasks() {
         const storedTasks = localStorage.getItem(this.STORAGE_KEY);
-        this.tasks = storedTasks ? JSON.parse(storedTasks) : [];
+        this.tasks = storedTasks ? JSON.parse(storedTasks, (key, value) => {
+            if (key === 'dueDate' && value) {
+                return new Date(value);
+            }
+            if (key === 'createdAt' && value) {
+                return new Date(value);
+            }
+            if (key === 'updatedAt' && value) {
+                return new Date(value);
+            }
+            return value;
+        }) : [];
         console.log('Tareas Finished cargadas:', this.tasks);
     }
 
     saveTasks() {
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.tasks));
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.tasks, (key, value) => {
+            if (value instanceof Date) {
+                return value.toISOString();
+            }
+            return value;
+        }));
         console.log('Tareas Finished guardadas:', this.tasks);
     }
 
@@ -73,7 +89,7 @@ export class ToDoListPageFinishedComponent implements OnInit, OnDestroy {
         this.saveTasks();
     }
 
-      getCategoryName(categoryId: string): string {
+    getCategoryName(categoryId: string): string {
         const category = this.categories.find(cat => cat.id === categoryId);
         return category ? category.name : 'Unknown Category';
     }
