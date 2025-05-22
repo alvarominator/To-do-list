@@ -13,7 +13,7 @@ import { CategoryService } from '../../../services/category.service';
     selector: 'to-do-list-menu-categories',
     imports: [InputTextModule, FormsModule, ButtonModule, CommonModule, DialogModule],
     templateUrl: 'to-do-list-menu-categories.component.html',
-    styleUrls: ['./To-do-list-menu-categories.component.css'], // Importar el archivo CSS
+    styleUrls: ['./To-do-list-menu-categories.component.css'],
     providers: [MessageService]
 })
 export class ToDoListMenuCategoriesComponent implements OnInit, OnDestroy {

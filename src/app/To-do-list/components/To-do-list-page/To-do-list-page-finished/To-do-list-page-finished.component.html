@@ -8,39 +8,42 @@
         icon="pi pi-plus"
         severity="contrast"
         (click)="openDialog()"
-        class="mb-3"
+        class=""
     />
 
-    <p-dialog
-        header="New Task"
-        [(visible)]="showDialog"
-        [modal]="true"
-        [closable]="true"
-        [style]="{ width: '30vw' }"
-    >
-        <div class="flex flex-col gap-3">
-            <input
-                type="text"
-                pInputText
-                placeholder="Title"
-                [(ngModel)]="newTask.title"
-            />
-
-            <textarea
-                pTextarea
-                rows="3"
-                placeholder="Description"
-                [(ngModel)]="newTask.description"
-            ></textarea>
-
-            <p-button
-                pButton
-                label="Save"
-                icon="pi pi-check"
-                (click)="saveTask()"
-            />
-        </div>
-    </p-dialog>
+   <p-dialog
+    header="New Task"
+    [(visible)]="showDialog"
+    [modal]="true"
+    [closable]="true"
+    [style]="{ width: '30vw' }"
+  >
+    <div class="flex flex-col gap-3 w-100">
+      <input
+      class="w-100"
+        type="text"
+        pInputText
+        placeholder="Title"
+        [(ngModel)]="newTask.title"
+      />
+<br>
+      <textarea
+        class="description m-5 w-100"
+        pTextarea
+        rows="5"
+        placeholder="Description"
+        [(ngModel)]="newTask.description"
+      ></textarea>
+<br>
+      <p-button
+      class="m-5"
+        pButton
+        label="Save"
+        icon="pi pi-check"
+        (click)="saveTask()"
+      />
+    </div>
+  </p-dialog>
 
      @if (tasks.length > 0) {
         <h3>Finished Tasks</h3>

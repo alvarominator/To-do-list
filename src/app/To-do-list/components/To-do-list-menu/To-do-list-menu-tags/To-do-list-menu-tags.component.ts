@@ -48,7 +48,7 @@ export class ToDoListMenuTagsComponent implements OnInit, OnDestroy {
     addTag(): void {
         const trimmedTagName = this.newTagName.trim();
         if (trimmedTagName && !this.existingTags.includes(trimmedTagName)) {
-            this.tagService.addTag(trimmedTagName); // Llama al servicio para añadir la tag
+            this.tagService.addTag(trimmedTagName); // Gets the service to add the tag
             this.tagAdded.emit(trimmedTagName);
             this.messageService.add({
                 severity: 'success',

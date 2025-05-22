@@ -61,7 +61,7 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
             this.categories = categories;
         });
 
-        this.tagsSubscription = this.tagService.tags$.subscribe(tags => {  // Obtén las tags del servicio
+        this.tagsSubscription = this.tagService.tags$.subscribe(tags => {  // Get the tags from service
             this.availableTags = tags;
         });
         this.initForm();
@@ -91,8 +91,8 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
             title: [this.task?.title || '', Validators.required],
             description: [this.task?.description || ''],
             dueDate: [this.task?.dueDate || null],
-            tags: [this.task?.tags || []], // Usa las tags del task
-            category: [foundCategory || null], // Usa el objeto Category, no solo el ID
+            tags: [this.task?.tags || []], // Use tags from tasks
+            category: [foundCategory || null], // Use object category, not only id
             subtasks: this.fb.array(
                 this.task?.subtasks?.map(s => this.fb.group({
                     title: [s.title],
@@ -135,9 +135,9 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
                 title: this.taskForm.value.title,
                 description: this.taskForm.value.description,
                 dueDate: this.taskForm.value.dueDate,
-                tags: this.taskForm.value.tags || [], // Usa las tags del formulario
+                tags: this.taskForm.value.tags || [], // Use tags in the form
                 subtasks: this.taskForm.value.subtasks,
-                categories: selectedCategoryId, // Usa el ID de la categoría seleccionada
+                categories: selectedCategoryId, //Use id in selected Category
             };
             this.taskService.updateTask(updatedTask);
             this.closed.emit(updatedTask);

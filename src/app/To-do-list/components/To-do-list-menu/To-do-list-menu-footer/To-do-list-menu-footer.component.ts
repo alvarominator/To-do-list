@@ -42,7 +42,7 @@ export class ToDoListMenuFooterComponent implements OnDestroy {
 
   toggleCalendar(): void {
     this.showCalendar = !this.showCalendar;
-    this.showTaskPopup = false; // Cerrar el popup al ocultar el calendario
+    this.showTaskPopup = false;
     this.selectedDateTasks = [];
     this.selectedDate = null;
   }
@@ -63,7 +63,7 @@ export class ToDoListMenuFooterComponent implements OnDestroy {
       }
       return false;
     });
-    this.showTaskPopup = true; // Mostrar el popup
+    this.showTaskPopup = true; // show pop up
     console.log('Tareas para la fecha seleccionada:', this.selectedDateTasks);
   }
 

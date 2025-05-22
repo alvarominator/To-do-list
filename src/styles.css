@@ -21,7 +21,6 @@ html, body {
   border-top-right-radius: 1rem;
   border-bottom-right-radius: 1rem;
 }
-
 .botont {
   margin-left: 3px;
   margin-bottom: 3px;
@@ -59,6 +58,17 @@ html, body {
   overflow-y: auto; /* Scroll */
   height: 100vh;
 }
+
+.w-100{
+width: 100%;
+}
+.m-5{
+  margin-top: 5px;
+}
+.m-10{
+  margin-top: 10px;
+}
+
 .Center{
   width: 100%;
   margin-left: 10%;

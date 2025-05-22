@@ -1,6 +1,6 @@
-<div class="flex flex-col">
-    <p-button (click)="showAddDialog()" label="Add New Category" severity="secondary" icon="pi pi-plus" class="mb-2"></p-button>
-    <div class="category-list">
+<div class="m-5">
+    <p-button (click)="showAddDialog()" class="botont m-10" label="Add New Category" severity="secondary" icon="pi pi-plus"></p-button>
+    <div class="category-list botont">
         <ng-container *ngFor="let category of existingCategories">
             <div class="category-card">
                 <div class="category-name">{{category.name}}</div>
@@ -13,7 +13,7 @@
     <p-dialog header="Add Category" [(visible)]="displayDialog" [modal]="true" [style]="{ width: '300px' }">
         <div class="p-fluid">
             <div class="field">
-                <label for="newCategoryName">Name of the Category</label>
+                <label class="L-color" for="newCategoryName">Name of the Category</label>
                 <input type="text" id="newCategoryName" [(ngModel)]="newCategoryName" pInputText />
             </div>
         </div>

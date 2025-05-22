@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { Task } from '../../../models/task.model';
 import { TagModule } from 'primeng/tag';
 import { Category } from '../../../models/category.model';
-import { CategoryService } from '../../../services/category.service'; // Importa el servicio
+import { CategoryService } from '../../../services/category.service';
 import { Subscription } from 'rxjs';
 import { ToDoListEditComponent } from '../../To-do-list-edit/To-do-list-edit.component';
 
@@ -30,7 +30,7 @@ export class ToDoListPageFinishedComponent implements OnInit, OnDestroy {
     private readonly STORAGE_KEY = 'finished-tasks';
     private categoriesSubscription?: Subscription;
 
-    constructor(private datePipe: DatePipe, private categoryService: CategoryService) { }  // Inyecta el servicio
+    constructor(private datePipe: DatePipe, private categoryService: CategoryService) { }
 
     ngOnInit() {
         this.loadTasks();
@@ -67,7 +67,6 @@ export class ToDoListPageFinishedComponent implements OnInit, OnDestroy {
         const now = new Date();
         this.newTask.createdAt = now;
         this.newTask.updatedAt = now;
-         // Si newTask.categories es un array de IDs de categoría, no necesitamos convertirlo.
         this.tasks.push({ ...this.newTask });
         this.showDialog = false;
         this.newTask = this.emptyTask('Finished');
@@ -120,7 +119,7 @@ export class ToDoListPageFinishedComponent implements OnInit, OnDestroy {
             updatedAt: new Date(),
             subtasks: [],
             dueDate: undefined,
-            categories: [],  // Inicializa como un array vacío
+            categories: [],
             tags: [],
         };
     }
