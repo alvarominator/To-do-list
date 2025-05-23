@@ -4,13 +4,12 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-import { Textarea } from 'primeng/inputtextarea';
+import {Textarea } from 'primeng/inputtextarea'; 
 import { CalendarModule } from 'primeng/calendar';
 import { ChipsModule } from 'primeng/chips';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { MultiSelectModule } from 'primeng/multiselect'; 
-
 import { Task } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
 import { CategoryService } from '../../services/category.service';
@@ -26,7 +25,7 @@ import { TagService } from '../../services/tag.service';
         CommonModule,
         ReactiveFormsModule,
         InputTextModule,
-        Textarea,
+        Textarea, 
         CalendarModule,
         ChipsModule,
         ButtonModule,
@@ -55,17 +54,18 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
     ngOnInit(): void {
         this.categoriesSubscription = this.categoryService.getCategories().subscribe(categories => {
             this.categories = categories;
-            this.initForm();
+            this.initForm(); 
         });
 
         this.tagsSubscription = this.tagService.tags$.subscribe(tags => {
             this.availableTags = tags;
         });
+        this.initForm(); 
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['task'] && this.categories.length > 0) {
-            this.initForm();
+        if (changes['task']) {
+            this.initForm(); 
         }
     }
 
@@ -79,11 +79,10 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     initForm(): void {
-        if (!this.categories || this.categories.length === 0) {
-            return;
-        }
-        const initialSelectedCategories = this.task?.categories?.length
-            ? this.categories.filter(cat => this.task!.categories!.includes(cat.id))
+        const currentCategories = this.categories || []; 
+
+        const initialSelectedCategoryObjects = this.task?.categories?.length
+            ? currentCategories.filter(cat => this.task!.categories!.includes(cat.id))
             : [];
 
         this.taskForm = this.fb.group({
@@ -91,7 +90,7 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
             description: [this.task?.description || ''],
             dueDate: [this.task?.dueDate || null],
             tags: [this.task?.tags || []],
-            categories: [initialSelectedCategories], 
+            categories: [initialSelectedCategoryObjects], 
             subtasks: this.fb.array(
                 this.task?.subtasks?.map(s => this.fb.group({
                     title: [s.title],
@@ -120,7 +119,7 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
 
     saveTask(): void {
         if (this.taskForm.valid) {
-            const selectedCategoryObjects: Category[] = this.taskForm.value.categories || [];
+            const selectedCategoryObjects: Category[] = this.taskForm.value.categories || []; 
             const selectedCategoryIds = selectedCategoryObjects.map(cat => cat.id);
 
             const updatedTask: Task = {
