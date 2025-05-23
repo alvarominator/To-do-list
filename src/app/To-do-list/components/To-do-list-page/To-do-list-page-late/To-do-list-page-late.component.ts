@@ -6,9 +6,11 @@ import { DialogModule } from 'primeng/dialog';
 import { Textarea } from 'primeng/textarea';
 import { FormsModule } from '@angular/forms';
 import { Task } from '../../../models/task.model';
-import { ToDoListEditComponent } from '../../To-do-list-edit/To-do-list-edit.component';
 import { TagModule } from 'primeng/tag';
 import { Category } from '../../../models/category.model';
+import { CategoryService } from '../../../services/category.service';
+import { Subscription } from 'rxjs';
+import { ToDoListEditComponent } from '../../To-do-list-edit/To-do-list-edit.component';
 
 @Component({
     selector: 'to-do-list-page-late',
@@ -23,27 +25,50 @@ export class ToDoListPageLateComponent implements OnInit, OnDestroy {
     newTask: Task = this.emptyTask('Late');
     showEditForm = false;
     selectedTask: Task | null = null;
-     categories: Category[] = [];
+    categories: Category[] = [];
     private readonly STORAGE_KEY = 'late-tasks';
+    private categoriesSubscription?: Subscription;
 
-    constructor(private datePipe: DatePipe) { }
+    constructor(private datePipe: DatePipe, private categoryService: CategoryService) { }
 
     ngOnInit() {
-        this.loadTasks();
+        this.categoriesSubscription = this.categoryService.getCategories().subscribe(categories => {
+            this.categories = categories;
+            this.loadTasks();
+        });
     }
 
     ngOnDestroy() {
         this.saveTasks();
+        if (this.categoriesSubscription) {
+            this.categoriesSubscription.unsubscribe();
+        }
     }
 
     loadTasks() {
         const storedTasks = localStorage.getItem(this.STORAGE_KEY);
-        this.tasks = storedTasks ? JSON.parse(storedTasks) : [];
+        this.tasks = storedTasks ? JSON.parse(storedTasks, (key, value) => {
+            if (key === 'dueDate' && value) {
+                return new Date(value);
+            }
+            if (key === 'createdAt' && value) {
+                return new Date(value);
+            }
+            if (key === 'updatedAt' && value) {
+                return new Date(value);
+            }
+            return value;
+        }) : [];
         console.log('Tareas Late cargadas:', this.tasks);
     }
 
     saveTasks() {
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.tasks));
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.tasks, (key, value) => {
+            if (value instanceof Date) {
+                return value.toISOString();
+            }
+            return value;
+        }));
         console.log('Tareas Late guardadas:', this.tasks);
     }
 
@@ -63,7 +88,7 @@ export class ToDoListPageLateComponent implements OnInit, OnDestroy {
         this.saveTasks();
     }
 
-      getCategoryName(categoryId: string): string {
+    getCategoryName(categoryId: string): string {
         const category = this.categories.find(cat => cat.id === categoryId);
         return category ? category.name : 'Unknown Category';
     }
@@ -108,115 +133,9 @@ export class ToDoListPageLateComponent implements OnInit, OnDestroy {
             createdAt: new Date(),
             updatedAt: new Date(),
             subtasks: [],
-             dueDate: undefined,
+            dueDate: undefined,
             categories: [],
             tags: [],
         };
     }
 }
-
-/* import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { DialogModule } from 'primeng/dialog';
-import { Textarea } from 'primeng/textarea';
-import { FormsModule } from '@angular/forms';
-import { Task } from '../../../models/task.model';
-import { ToDoListEditComponent } from '../../To-do-list-edit/To-do-list-edit.component';
-
-@Component({
-  selector: 'to-do-list-page-late',
-  standalone: true,
-  imports: [CommonModule, ButtonModule, InputTextModule, DialogModule, Textarea, FormsModule, ToDoListEditComponent ],
-  templateUrl: './to-do-list-page-late.component.html',
-})
-export class ToDoListPageLateComponent implements OnInit, OnDestroy {
-  tasks: Task[] = [];
-  showDialog = false;
-  newTask: Task = this.emptyTask('Late');
-  showEditForm = false;
-  selectedTask: Task | null = null;
-  private readonly STORAGE_KEY = 'late-tasks'; // Key for the Local Storage
-
-  constructor() { }
-
-  ngOnInit() {
-    this.loadTasks();
-  }
-
-  ngOnDestroy() {
-    this.saveTasks(); // Save when leaving the component (or on page reload)
-  }
-
-  loadTasks() {
-    const storedTasks = localStorage.getItem(this.STORAGE_KEY);
-    this.tasks = storedTasks ? JSON.parse(storedTasks) : [];
-    console.log('Tareas Late cargadas:', this.tasks);
-  }
-
-  saveTasks() {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.tasks));
-    console.log('Tareas Late guardadas:', this.tasks);
-  }
-
-  openDialog() {
-    this.newTask = this.emptyTask('Late');
-    this.showDialog = true;
-  }
-
-  saveTask() {
-    this.newTask.id = crypto.randomUUID();
-    const now = new Date();
-    this.newTask.createdAt = now;
-    this.newTask.updatedAt = now;
-    this.tasks.push({ ...this.newTask });
-    this.showDialog = false;
-    this.newTask = this.emptyTask('Late');
-    this.saveTasks(); // Save immediately after adding
-  }
-
-  editTask(task: Task) {
-    this.selectedTask = { ...task };
-    this.showEditForm = true;
-  }
-
-  openEditForm(task: Task) {
-    this.selectedTask = { ...task };
-    this.showEditForm = true;
-  }
-
-  onEditFormClosed(taskUpdated: Task | null) {
-    this.showEditForm = false;
-    this.selectedTask = null;
-    if (taskUpdated) {
-      const index = this.tasks.findIndex(t => t.id === taskUpdated.id);
-      if (index !== -1) {
-        this.tasks[index] = { ...taskUpdated };
-        this.saveTasks(); // Save after editing
-      }
-    }
-  }
-
-  // New method to handle task deletion
-  onTaskDeleted(taskToDelete: Task) {
-    if (taskToDelete && taskToDelete.id) {
-      this.tasks = this.tasks.filter(task => task.id !== taskToDelete.id);
-      this.saveTasks(); // Save the updated list after deleting
-      this.selectedTask = null;
-      this.showEditForm = false;
-    }
-  }
-
-  private emptyTask(status: 'Non Started' | 'In Progress' | 'Paused' | 'Late' | 'Finished'): Task {
-    return {
-      id: '',
-      title: '',
-      description: '',
-      status: status,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      subtasks: [],
-    };
-  }
-} */

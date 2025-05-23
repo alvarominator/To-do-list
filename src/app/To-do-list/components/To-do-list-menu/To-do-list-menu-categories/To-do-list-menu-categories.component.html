@@ -23,25 +23,3 @@
         </ng-template>
     </p-dialog>
 </div>
-
-<!-- <div class="flex flex-col">
-    <p-button (click)="showAddDialog()" label="Añadir Categoría" severity="secondary" icon="pi pi-plus" class="mb-2"></p-button>
-    <div class="flex flex-wrap gap-2">
-        <ng-container *ngFor="let category of existingCategories">
-            <p-chip [label]="category.name" (onRemove)="removeCategory(category)" removable class="cursor-pointer"></p-chip>
-        </ng-container>
-    </div>
-    <p-dialog header="Añadir Categoría" [(visible)]="displayDialog" [modal]="true" [style]="{ width: '300px' }">
-        <div class="p-fluid">
-            <div class="field">
-                <label for="newCategoryName">Nombre de la Categoría</label>
-                <input type="text" id="newCategoryName" [(ngModel)]="newCategoryName" pInputText />
-            </div>
-        </div>
-        <ng-template pTemplate="footer">
-            <p-button (click)="addCategory()" label="Añadir" icon="pi pi-plus"></p-button>
-            <p-button (click)="displayDialog = false" label="Cancelar" styleClass="p-button-secondary"></p-button>
-        </ng-template>
-    </p-dialog>
-</div>
- -->
