@@ -1,4 +1,4 @@
-// src/app/core/interceptors/auth.interceptor.ts
+// src/app/To-do-list/auth/auth.interceptor.ts
 import { inject, Injectable } from '@angular/core';
 import {
   HttpInterceptorFn,

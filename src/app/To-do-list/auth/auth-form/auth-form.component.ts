@@ -1,4 +1,4 @@
-// src/app/auth/auth-form.component.ts
+// src/app/auth/auth-form/auth-form.component.ts
 import { Component, inject, computed } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
@@ -25,7 +25,7 @@ import { MessageModule } from 'primeng/message';
     RouterLink
   ],
   templateUrl: './auth-form.component.html',
-  styleUrls: ['./auth-form.component.css'] // Import the CSS file
+  styleUrls: ['./auth-form.component.css']
 })
 export class AuthFormComponent {
   private fb = inject(FormBuilder);
@@ -67,12 +67,12 @@ export class AuthFormComponent {
       }
       this.auth.register(email, password).subscribe(success => {
         this.authError = !success;
-        if (success) this.router.navigateByUrl('/non-started');
+       if (success) this.router.navigateByUrl('/tasks/Non Started');
       });
     } else {
       this.auth.login(email, password).subscribe(success => {
         this.authError = !success;
-        if (success) this.router.navigateByUrl('/non-started');
+        if (success) this.router.navigateByUrl('/tasks/Non Started');
       });
     }
   }

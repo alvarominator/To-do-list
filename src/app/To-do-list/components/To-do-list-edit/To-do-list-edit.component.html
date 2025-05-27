@@ -24,6 +24,17 @@
     </div>
 
     <div class="field w-100 m-5">
+        <label for="status">Status</label>
+        <p-dropdown 
+            formControlName="status" 
+            [options]="taskStatuses" 
+            placeholder="Select Status" 
+            optionLabel="name" 
+            optionValue="value"
+            class="w-100"
+        ></p-dropdown>
+    </div>
+    <div class="field w-100 m-5">
         <label for="tags">Tags</label>
         <br>
         <p-multiSelect

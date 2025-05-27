@@ -1,45 +1,46 @@
+/* src/app/auth/auth-form/auth-form.component.css */
 :host {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f8f9fa; /* Light background color */
+  background-color: #f8f9fa;
 }
 
 .card-container {
   width: 100%;
-  max-width: 400px; /* Increased max width for better readability */
+  max-width: 400px;
   margin: auto;
-  margin-top: 2rem; /* Added some top margin */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  border-radius: 8px; /* Rounded corners */
-  padding: 1.5rem; /* Increased padding */
-  background-color: white; /* White card background */
+  margin-top: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  border-radius: 8px;
+  padding: 1.5rem;
+  background-color: white;
 }
 
 .form-title {
   text-align: center;
-  margin-bottom: 1.5rem; /* Increased margin below title */
-  color: #343a40; /* Darker text color for title */
+  margin-bottom: 1.5rem;
+  color: #343a40;
 }
 
 .form-field {
-  margin-bottom: 1rem; /* Increased margin between fields */
+  margin-bottom: 1rem;
 }
 
 .form-label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #495057; /* Slightly darker label color */
-  font-weight: bold; /* Make labels bold */
+  color: #495057;
+  font-weight: bold;
 }
 
 .p-inputtext {
   width: 100%;
-  padding: 0.75rem; /* Increased input padding */
+  padding: 0.75rem;
   border: 1px solid #ced4da;
   border-radius: 4px;
-  box-sizing: border-box; /* Ensure padding doesn't affect width */
+  box-sizing: border-box;
 }
 
 .p-password {
@@ -48,24 +49,24 @@
 
 .p-error {
   font-size: 0.8rem;
-  color: #dc3545; /* Standard error color */
+  color: #dc3545;
   margin-top: 0.25rem;
 }
 
 .submit-button {
   width: 100%;
-  padding: 0.75rem; /* Increased button padding */
+  padding: 0.75rem;
   border-radius: 4px;
   font-weight: bold;
   color: white;
-  background-color: #007bff; /* Primary blue color */
+  background-color: #007bff;
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out; /* Smooth hover effect */
+  transition: background-color 0.2s ease-in-out;
 }
 
 .submit-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #0056b3;
 }
 
 .auth-error-message {

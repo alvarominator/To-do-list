@@ -1,4 +1,4 @@
-// category.service.ts
+// src/app/To-do-list/services/category.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Category } from '../models/category.model';

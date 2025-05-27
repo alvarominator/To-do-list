@@ -4,12 +4,12 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-import {Textarea } from 'primeng/inputtextarea'; 
+import { Textarea } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
 import { ChipsModule } from 'primeng/chips';
 import { ButtonModule } from 'primeng/button';
-import { TagModule } from 'primeng/tag';
 import { MultiSelectModule } from 'primeng/multiselect'; 
+import { DropdownModule } from 'primeng/dropdown';
 import { Task } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
 import { CategoryService } from '../../services/category.service';
@@ -25,12 +25,12 @@ import { TagService } from '../../services/tag.service';
         CommonModule,
         ReactiveFormsModule,
         InputTextModule,
-        Textarea, 
+        Textarea,
         CalendarModule,
         ChipsModule,
         ButtonModule,
-        TagModule,
-        MultiSelectModule
+        MultiSelectModule,
+        DropdownModule,
     ],
 })
 export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
@@ -44,6 +44,15 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
     availableTags: string[] = [];
     tagsSubscription?: Subscription;
 
+    //Options for the status dropdown
+    taskStatuses = [
+      { name: 'Non Started', value: 'Non Started' },
+      { name: 'In Progress', value: 'In Progress' },
+      { name: 'Paused', value: 'Paused' },
+      { name: 'Late', value: 'Late' },
+      { name: 'Finished', value: 'Finished' }
+    ];
+
     constructor(
         private fb: FormBuilder,
         private taskService: TaskService,
@@ -54,17 +63,20 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
     ngOnInit(): void {
         this.categoriesSubscription = this.categoryService.getCategories().subscribe(categories => {
             this.categories = categories;
-            this.initForm(); 
+            this.initForm();
         });
 
         this.tagsSubscription = this.tagService.tags$.subscribe(tags => {
             this.availableTags = tags;
+            this.initForm();
         });
-        this.initForm(); 
+        if (!this.categoriesSubscription && !this.tagsSubscription) {
+          this.initForm();
+        }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['task']) {
+        if (changes['task'] && changes['task'].currentValue !== changes['task'].previousValue) {
             this.initForm(); 
         }
     }
@@ -96,7 +108,8 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
                     title: [s.title],
                     isCompleted: [s.isCompleted]
                 })) || []
-            )
+            ),
+            status: [this.task?.status || 'Non Started', Validators.required]
         });
     }
 
@@ -126,7 +139,7 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
                 id: this.task?.id || crypto.randomUUID(),
                 createdAt: this.task?.createdAt || new Date(),
                 updatedAt: new Date(),
-                status: this.task?.status || 'Non Started', 
+                status: this.taskForm.value.status,
                 title: this.taskForm.value.title,
                 description: this.taskForm.value.description,
                 dueDate: this.taskForm.value.dueDate,

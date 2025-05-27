@@ -1,5 +1,5 @@
 <div class="Center">
-    <h1>Finished</h1>
+    <h1>{{ pageTitle }}</h1>
 
     <p-button
         pButton
@@ -29,7 +29,7 @@
 
             <textarea
               class="w-100 m-5"
-              pTextarea
+              pInputTextarea 
               rows="3"
               placeholder="Description"
               [(ngModel)]="newTask.description"
@@ -45,57 +45,64 @@
         </div>
     </p-dialog>
 
-     @if (tasks.length > 0) {
-        <h3>Finished Tasks</h3>
+    @if (tasks.length > 0) {
+        <h3>{{ pageTitle }}</h3>
         <ul>
             @for (task of tasks; track task.id) {
-                 <li class="task-item-layout">
+                <li class="task-item-layout">
                     <div (click)="editTask(task)" class="task-item-details">
                         <strong>{{ task.title }}</strong><br />
                         <small>{{ task.description }}</small><br />
-                         <small
-                            >Due Date:
-                             {{ task.dueDate ? (task.dueDate | date : "yyyy-MM-dd") : "No Due Date" }}</small
-                        >
+                        <small>
+                            Due Date:
+                            {{ task.dueDate ? (task.dueDate | date : "yyyy-MM-dd") : "No Due Date" }}
+                        </small>
                         <div class="task-categories-tags">
                             @if (task.categories && task.categories.length > 0) {
                                 <span class="category-display">
                                     Categories:
-                                    <span *ngFor="let categoryId of task.categories;">
-                                        {{ getCategoryName(categoryId) }}
-                                    </span>
+                                    @for (categoryId of task.categories; track categoryId) {
+                                        <span>
+                                            {{ getCategoryName(categoryId) }}
+                                        </span>
+                                    }
                                 </span>
                             }
-                            <span *ngIf="task.tags && task.tags.length > 0" class="tags">
-                                Tags:
-                                <p-tag
-                                    *ngFor="let tag of task.tags"
-                                    severity="info"
-                                    [value]="tag"
-                                ></p-tag>
-                            </span>
+                            <br>
+                            @if (task.tags && task.tags.length > 0) {
+                                <span class="tags">
+                                    Tags:
+                                    @for (tag of task.tags; track tag) {
+                                        <p-tag
+                                            class="m-5"
+                                            severity="secondary"
+                                            [value]="tag"
+                                        ></p-tag>
+                                    }
+                                </span>
+                            }
                         </div>
                     </div>
                     <p-button
-                         severity="secondary"
-                         icon="pi pi-pencil"
-                         styleClass="p-button-rounded p-button-sm"
-                         (click)="openEditForm(task)"
-                     ></p-button>
-                 </li>
+                        severity="secondary"
+                        icon="pi pi-pencil"
+                        styleClass="p-button-rounded p-button-sm"
+                        (click)="openEditForm(task)"
+                    ></p-button>
+                </li>
             }
         </ul>
     } @else {
-        <p class="text-gray-500 mt-4">No finished tasks yet.</p>
+        <p class="text-gray-500 mt-4">{{ noTasksMessage }}</p>
     }
 
     @if (showEditForm && selectedTask) {
         <div class="edit-task-panel">
             <to-do-list-edit
-                 [task]="selectedTask"
-                 (closed)="onEditFormClosed($event)"
-                 (deleted)="onTaskDeleted($event)"
-             ></to-do-list-edit>
+                [task]="selectedTask"
+                (closed)="onEditFormClosed($event)"
+                (deleted)="onTaskDeleted($event)"
+            ></to-do-list-edit>
         </div>
     }
 </div>

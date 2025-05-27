@@ -1,3 +1,4 @@
+// src/app/To-do-list/components/to-do-list-menu/to-do-list-menu-footer.component.ts
 import { Component, OnDestroy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../auth/auth.service';
