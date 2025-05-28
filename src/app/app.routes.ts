@@ -10,12 +10,12 @@ const getPageTitleStatic = (route: ActivatedRouteSnapshot): string => {
   const status = route.paramMap.get('status');
   // Switch to change title, to the one of the state
   switch (status) {
-    case 'Non Started': return 'Tareas No Iniciadas';
-    case 'In Progress': return 'Tareas En Progreso';
-    case 'Paused': return 'Tareas Pausadas';
-    case 'Late': return 'Tareas Retrasadas';
-    case 'Finished': return 'Tareas Terminadas';
-    default: return 'Tareas';
+    case 'Non Started': return 'Non started Tasks';
+    case 'In Progress': return 'In progress Tasks';
+    case 'Paused': return 'Paused Tasks';
+    case 'Late': return 'Late Tasks';
+    case 'Finished': return 'Finished tasks';
+    default: return 'Tasks';
   }
 };
 

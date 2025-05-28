@@ -65,7 +65,7 @@ export class ToDoListMenuFooterComponent implements OnDestroy {
       return false;
     });
     this.showTaskPopup = true; // show pop up
-    console.log('Tareas para la fecha seleccionada:', this.selectedDateTasks);
+    console.log('Tasks for the selected Date:', this.selectedDateTasks);
   }
 
   closeTaskPopup(): void {

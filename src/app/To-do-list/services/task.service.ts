@@ -23,7 +23,7 @@ export class TaskService {
   private saveAllTasks(tasksToSave: Task[]): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(tasksToSave, this.dateReplacer));
     this.tasksSubject.next(tasksToSave);
-    console.log('Todas las tareas guardadas en localStorage:', tasksToSave);
+    console.log('All tasks saved in Local Storage', tasksToSave);
   }
 
   addTask(newTask: Task): void {
@@ -95,6 +95,56 @@ export class TaskService {
         }
     }
   }
+
+  /**
+   * Removes a specific category ID from all tasks that reference it.
+   * @param categoryId The ID of the category to remove.
+   */
+  removeCategoryFromAllTasks(categoryId: string): void {
+    const currentTasks = this.tasksSubject.value;
+    let tasksModified = false;
+
+    const updatedTasks = currentTasks.map(task => {
+      // Create a copy of the task to ensure immutability,
+      // only if its categories array needs modification.
+      if (task.categories && task.categories.includes(categoryId)) {
+        const newCategories = task.categories.filter(id => id !== categoryId);
+        if (newCategories.length !== task.categories.length) {
+          tasksModified = true; // Mark that at least one task was modified
+          return { ...task, categories: newCategories, updatedAt: new Date() };
+        }
+      }
+      return task; // Return original task if no modification needed
+    });
+
+    if (tasksModified) {
+      this.saveAllTasks(updatedTasks);
+    }
+  }
+  /**
+   * Removes a specific tag from all tasks that reference it.
+   * @param tagToRemove The tag string to remove.
+   */
+  removeTagFromAllTasks(tagToRemove: string): void {
+    const currentTasks = this.tasksSubject.value;
+    let tasksModified = false;
+
+    const updatedTasks = currentTasks.map(task => {
+      if (task.tags && task.tags.includes(tagToRemove)) {
+        const newTags = task.tags.filter(tag => tag !== tagToRemove);
+        if (newTags.length !== task.tags.length) {
+          tasksModified = true;
+          return { ...task, tags: newTags, updatedAt: new Date() };
+        }
+      }
+      return task;
+    });
+
+    if (tasksModified) {
+      this.saveAllTasks(updatedTasks);
+    }
+  }
+
 
   private dateReviver(key: string, value: any): any {
     if (typeof value === 'string' && (key.endsWith('At') || key === 'dueDate')) { 

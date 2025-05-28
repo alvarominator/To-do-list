@@ -128,3 +128,27 @@ width: 100%;
     padding: 0.5rem 0; 
     border-bottom: 1px dashed var(--surface-border);
 }
+/* Toast Alerts */
+.p-toast-message {
+    background-color: rgba(0, 0, 0, 0.9) !important;
+
+}
+
+.p-toast-message .p-toast-detail {
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+.p-toast-message .p-toast-summary {
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+
+.p-toast-message .p-toast-icon {
+    opacity: 1 !important;
+}
+
+.p-toast-message.p-toast-message-info,
+.p-toast-message.p-toast-message-success,
+.p-toast-message.p-toast-message-warn,
+.p-toast-message.p-toast-message-error {
+    opacity: 1 !important; }

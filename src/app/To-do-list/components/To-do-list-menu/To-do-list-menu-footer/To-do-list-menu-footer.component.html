@@ -12,12 +12,12 @@
 
   <div *ngIf="showTaskPopup" class="task-popup">
     <div class="popup-header">
-      <h3>Tareas para el {{ selectedDate | date: 'dd/MM/yyyy' }}</h3>
+      <h3>Tasks for {{ selectedDate | date: 'dd/MM/yyyy' }}</h3>
       <button type="button" class="close-button" (click)="closeTaskPopup()">X</button>
     </div>
     <ul *ngIf="selectedDateTasks.length > 0">
       <li *ngFor="let task of selectedDateTasks">{{ task.title }}</li>
     </ul>
-    <p *ngIf="selectedDateTasks.length === 0">No hay tareas para este día.</p>
+    <p *ngIf="selectedDateTasks.length === 0">No tasks to this day.</p>
   </div>
 </div>

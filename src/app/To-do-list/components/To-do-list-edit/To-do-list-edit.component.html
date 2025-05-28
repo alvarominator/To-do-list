@@ -35,6 +35,22 @@
         ></p-dropdown>
     </div>
     <div class="field w-100 m-5">
+        <label for="categories">Categories</label>
+        <br>
+        <p-multiSelect
+            class="m-5"
+            formControlName="categories"
+            [options]="categories"
+            optionLabel="name"
+            placeholder="Select Categories"
+            [filter]="true"
+            [showClear]="true"
+            [maxSelectedLabels]="3"
+            display="chip"
+        ></p-multiSelect>
+    </div>
+
+    <div class="field w-100 m-5">
         <label for="tags">Tags</label>
         <br>
         <p-multiSelect
@@ -81,22 +97,6 @@
                 ></button>
             </div>
         </div>
-    </div>
-
-    <div class="field w-100 m-5">
-        <label for="categories">Categories</label>
-        <br>
-        <p-multiSelect
-            class="m-5"
-            formControlName="categories"
-            [options]="categories"
-            optionLabel="name"
-            placeholder="Select Categories"
-            [filter]="true"
-            [showClear]="true"
-            [maxSelectedLabels]="3"
-            display="chip"
-        ></p-multiSelect>
     </div>
 
     <hr />
