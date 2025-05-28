@@ -49,15 +49,37 @@
         ></p-multiSelect>
     </div>
 
-    <div formArrayName="subtasks" class="subtasks w-100 m-5">
-        <div>
+    <div formArrayName="subtasks" class="subtasks-container w-100 m-5"> <div>
             <label for="Subtasks">Subtasks</label>
         </div>
         <button class="m-5" pButton type="button" label="Add Subtask" icon="pi pi-plus" (click)="addSubtask()" severity="secondary"></button>
-        <div *ngFor="let subtask of subtasks.controls; let i = index" [formGroupName]="i" class="subtask-item">
-            <input pInputText formControlName="title" placeholder="Subtask title" />
-            <p-checkbox formControlName="isCompleted" binary label="Completed"></p-checkbox>
-            <button pButton icon="pi pi-times" (click)="removeSubtask(i)" severity="danger" rounded type="button"></button>
+        
+        <div class="subtask-list">
+            <div 
+                *ngFor="let subtask of subtasks.controls; let i = index; trackBy: trackByFn" 
+                [formGroupName]="i" 
+                class="subtask-item p-d-flex p-ai-center p-mb-2 p-py-1" 
+                style="gap: 10px;"
+            >
+                <div class="p-field p-mb-0 p-flex-grow-1">
+                    <input pInputText formControlName="title" placeholder="Subtask title" class="w-100" />
+                </div>
+                
+                <div class="p-field p-mb-0 p-d-flex p-ai-center">
+                    <p-checkbox formControlName="isCompleted" binary label="Completed"></p-checkbox>
+                </div>
+                
+                <button 
+                    pButton 
+                    type="button" 
+                    icon="pi pi-times" 
+                    (click)="removeSubtask(i)" 
+                    severity="danger" 
+                    rounded 
+                    [style]="{'width': '35px', 'height': '25px'}" 
+                    aria-label="Remove Subtask"
+                ></button>
+            </div>
         </div>
     </div>
 

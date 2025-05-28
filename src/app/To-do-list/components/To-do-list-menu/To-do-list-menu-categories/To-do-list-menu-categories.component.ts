@@ -1,4 +1,4 @@
-// src/app/To-do-list/components/to-do-list-menu/to-do-list-menu-categories.component.ts
+//src/app/To-do-list/components/To-do-list-menu/To-do-list-menu-categories/to-do-list-menu-categories.component.ts
 import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';

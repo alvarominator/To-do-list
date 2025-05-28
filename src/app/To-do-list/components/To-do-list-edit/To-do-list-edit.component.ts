@@ -8,14 +8,16 @@ import { Textarea } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
 import { ChipsModule } from 'primeng/chips';
 import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
 import { MultiSelectModule } from 'primeng/multiselect'; 
-import { DropdownModule } from 'primeng/dropdown';
+import { DropdownModule } from 'primeng/dropdown'; 
+import { CheckboxModule } from 'primeng/checkbox';
 import { Task } from '../../models/task.model';
-import { TaskService } from '../../services/task.service';
 import { CategoryService } from '../../services/category.service';
 import { Category } from '../../models/category.model';
 import { Subscription } from 'rxjs';
 import { TagService } from '../../services/tag.service';
+import { TaskService } from '../../services/task.service';
 
 @Component({
     selector: 'to-do-list-edit',
@@ -29,8 +31,10 @@ import { TagService } from '../../services/tag.service';
         CalendarModule,
         ChipsModule,
         ButtonModule,
+        TagModule,
         MultiSelectModule,
         DropdownModule,
+        CheckboxModule
     ],
 })
 export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
@@ -44,7 +48,6 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
     availableTags: string[] = [];
     tagsSubscription?: Subscription;
 
-    //Options for the status dropdown
     taskStatuses = [
       { name: 'Non Started', value: 'Non Started' },
       { name: 'In Progress', value: 'In Progress' },
@@ -63,12 +66,12 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
     ngOnInit(): void {
         this.categoriesSubscription = this.categoryService.getCategories().subscribe(categories => {
             this.categories = categories;
-            this.initForm();
+            this.initForm(); 
         });
 
         this.tagsSubscription = this.tagService.tags$.subscribe(tags => {
             this.availableTags = tags;
-            this.initForm();
+            this.initForm(); 
         });
         if (!this.categoriesSubscription && !this.tagsSubscription) {
           this.initForm();
@@ -109,7 +112,7 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
                     isCompleted: [s.isCompleted]
                 })) || []
             ),
-            status: [this.task?.status || 'Non Started', Validators.required]
+            status: [this.task?.status || 'Non Started', Validators.required] 
         });
     }
 
@@ -128,6 +131,12 @@ export class ToDoListEditComponent implements OnInit, OnChanges, OnDestroy {
 
     removeSubtask(index: number): void {
         this.subtasks.removeAt(index);
+        console.log(`Subtask at index ${index} removed. Current subtasks:`, this.subtasks.value);
+    }
+
+  
+    trackByFn(index: number, item: any): any {
+        return index; 
     }
 
     saveTask(): void {
